@@ -39,11 +39,6 @@ repos:
     rev: v1.3.1
     hooks:
       - id: forbid-crlf
-  - repo: https://github.com/warpnet/salt-lint
-    rev: v0.8.0
-    hooks:
-      - id: salt-lint
-        files: '\.sls$'
   - repo: https://github.com/adrienverge/yamllint
     rev: v1.28.0
     hooks:
