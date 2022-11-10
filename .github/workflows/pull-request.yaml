@@ -1,0 +1,8 @@
+---
+name: pull-request
+
+on: [ pull_request ]
+
+jobs:
+  pre-commit:
+    uses: ./.github/workflows/pre-commit.yaml
