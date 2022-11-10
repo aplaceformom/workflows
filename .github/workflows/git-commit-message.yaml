@@ -1,0 +1,45 @@
+---
+name: git-commit-check
+on:
+  pull_request:
+    types:
+      - opened
+      - edited
+      - reopened
+      - synchronize
+
+jobs:
+  check-commit-message:
+    name: Check Commit Message
+    runs-on: ubuntu-latest
+    steps:
+      - name: Commit Type
+        uses: gsactions/commit-message-checker@v1
+        with:
+          pattern: "^(feat|bug|fix|hotfix|docs|misc)(: |/)"
+          error: "First line must begin with one of 'feat', 'bug', 'fix', 'hotfix', 'docs', 'misc'"
+          excludeTitle: 'true'
+          excludeDescription: 'true'
+          checkAllCommitMessages: "true"
+          accessToken: ${{ github.token }}
+
+      - name: Line Length
+        uses: gsactions/commit-message-checker@v1
+        with:
+          pattern: '^.{5,74}$'
+          error: 'The maximum line length of 74 characters is exceeded.'
+          excludeTitle: 'true'
+          excludeDescription: 'true'
+          checkAllCommitMessages: 'true'
+          accessToken: ${{ github.token }}
+
+      - name: Check for Resolves / Fixes
+        uses: gsactions/commit-message-checker@v1
+        with:
+          flags: mi
+          pattern: '^.?(close[sd]?|fix(e[sd])?|resolve[sd]?): \#[0-9]+$'
+          error: "Every commit must resolve/close/fix an issue. Open a new issue for commit's unrelated to existing issues."
+          excludeTitle: 'true'
+          excludeDescription: 'true'
+          checkAllCommitMessages: 'true'
+          accessToken: ${{ github.token }}

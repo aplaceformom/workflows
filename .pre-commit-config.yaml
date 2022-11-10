@@ -43,7 +43,7 @@ repos:
     rev: v1.28.0
     hooks:
       - id: yamllint
-        args: [--format, parsable, --strict]
+        args: ['-d {extends: relaxed, rules: {line-length: disable, truthy: disable}}', '-s']
   - repo: https://github.com/gruntwork-io/pre-commit
     rev: v0.1.17
     hooks:

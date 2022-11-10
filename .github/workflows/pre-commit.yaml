@@ -1,0 +1,43 @@
+---
+name: pre-commit
+
+on:
+  workflow_call:
+
+env:
+  DEBIAN_FRONTEND: noninteractive
+
+jobs:
+  pre-commit:
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      repository-projects: read
+    steps:
+      - uses: actions/checkout@v3
+
+      - id: pre-commit-cache
+        run: echo "::set-output name=prefix::pre-commit-${{ runner.os }}-$(python --version --version | sha256sum | awk '{print$1}')"
+
+      - uses: actions/cache@v2
+        with:
+          path: ~/.cache/pre-commit
+          key: ${{ steps.pre-commit-cache.outputs.prefix }}-${{ hashFiles('.pre-commit-config.yaml') }}
+          restore-keys: ${{ steps.pre-commit-cache.outputs.prefix }}-
+
+      - uses: pre-commit/action@v1.0.1
+
+      - name: Conventional Commit Message
+        if: ${{ false }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.token == '' && secrets.token || github.token }}
+        run: |
+          set -- $(gh api "repos/{owner}/{repo}/pulls/${{ github.event.pull_request.number }}/commits" --jq '.[].sha')
+          git fetch --deepen "$#"
+          for sha; do
+            git show -s --format='%s%n%n%b' "${sha}" > '/tmp/git-commit-message.log'
+            if ! pre-commit run --hook-stage commit-msg --commit-msg-filename '/tmp/git-commit-message.log'; then
+              echo 'See: <https://www.conventionalcommits.org/en/v1.0.0/>' >&2
+              exit 1
+            fi
+          done
