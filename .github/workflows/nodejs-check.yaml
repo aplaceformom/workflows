@@ -1,0 +1,29 @@
+name: Run Node.js checks
+
+on:
+  workflow_call:
+    inputs:
+      environment:
+        description: Target environment
+        type: string
+        default: dev
+      node-version:
+        description: Node.js version to use
+        type: string
+        required: true
+
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - id: setup
+        uses: actions/setup-node@v2
+        with:
+          node-version: ${{ inputs.node-version }}
+
+      - id: check
+        env:
+          ENVIRONMENT: ${{ inputs.environment }}
+        run: npm ci && npm run check
