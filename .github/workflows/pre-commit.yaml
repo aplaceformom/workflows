@@ -26,18 +26,3 @@ jobs:
           restore-keys: ${{ steps.pre-commit-cache.outputs.prefix }}-
 
       - uses: pre-commit/action@v1.0.1
-
-      - name: Conventional Commit Message
-        if: ${{ false }}
-        env:
-          GITHUB_TOKEN: ${{ secrets.token == '' && secrets.token || github.token }}
-        run: |
-          set -- $(gh api "repos/{owner}/{repo}/pulls/${{ github.event.pull_request.number }}/commits" --jq '.[].sha')
-          git fetch --deepen "$#"
-          for sha; do
-            git show -s --format='%s%n%n%b' "${sha}" > '/tmp/git-commit-message.log'
-            if ! pre-commit run --hook-stage commit-msg --commit-msg-filename '/tmp/git-commit-message.log'; then
-              echo 'See: <https://www.conventionalcommits.org/en/v1.0.0/>' >&2
-              exit 1
-            fi
-          done
