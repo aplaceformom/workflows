@@ -2,20 +2,4 @@
 # See: https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners#codeowners-syntax
 
 # Default reviewers
-* @aplaceformom/techops
-
-##
-# File pattern specific reviewers. Please sort all entries in alphabetical
-# order.
-
-# POSIX Shell reviews
-*.sh @fuzzy @major0
-
-# PowerShell reviewers
-*.ps1 @apfm-ricky @brentAPFM
-
-# Python reviews
-*.py @fuzzy @major0
-
-# Terraform
-*.tf @fuzzy @apfm-ricky @major0
+* @fuzzy @major0
