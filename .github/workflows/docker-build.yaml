@@ -4,7 +4,7 @@ on:
   workflow_call:
     inputs:
       name:
-        description: "Docker image name in owner/app format. Defaults to github.repo"
+        description: "Docker image name in owner/app format. Defaults to github.event.repository.name"
         required: false
         type: string
       deployment-role:
@@ -72,7 +72,7 @@ jobs:
       uses: docker/metadata-action@v3
       with:
         images: |
-          ghcr.io/${{ github.repo }}
+          ghcr.io/${{ github.event.repository.name }}
           ${{ needs.config.outputs.ecr-repo }}
         flavour:
           latest=auto
@@ -97,7 +97,7 @@ jobs:
         tags: ${{ steps.docker-metadata.outputs.tags }}
         labels: ${{ steps.docker-metadata.outputs.labels }}
         build-args: ${{ secrets.build-args }}
-        cache-from: type=registry,ref=ghcr.io/${{ github.repo }}:latest
+        cache-from: type=registry,ref=ghcr.io/${{ github.event.repository.name }}:latest
         cache-to: type=inline
 
     - if: always()
