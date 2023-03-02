@@ -1,12 +1,7 @@
 ---
 name: git-commit-check
-on:
-  pull_request:
-    types:
-      - opened
-      - edited
-      - reopened
-      - synchronize
+
+on: [workflow_call]
 
 jobs:
   check-commit-message:
