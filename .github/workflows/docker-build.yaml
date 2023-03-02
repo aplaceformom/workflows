@@ -4,37 +4,36 @@ on:
   workflow_call:
     inputs:
       name:
-        description: Docker image name in owner/app format. Defaults to github.repo
+        description: "Docker image name in owner/app format. Defaults to github.repo"
         required: false
         type: string
       role-to-assume:
-        description: AWS IAM Role to assume when deploying to ECR.
+        description: "AWS IAM Role to assume when deploying to ECR."
         required: false
         default: ""
         type: string
       aws-region:
-        description: AWS Region to deploy to.
+        description: "AWS Region to deploy to."
         required: true
         default: us-west-2
         type: string
       ecr-repo:
-        description: AWS ECR Repo to push to.
+        description: "AWS ECR Repo to push to."
         required: false
         default: ""
         type: string
       tag-suffix:
-        description: Append the tag-suffix to the image tag.
+        description: "Append the tag-suffix to the image tag."
         type: string
       push:
-        description: Enable to push built image to GHCR/ECR
+        description: "Enable to push built image to GHCR/ECR"
         type: boolean
         default: false
     secrets:
       build-args:
-        description: Pass arbitrary build_args into the docker-build process. This can be used to pass secrets tokens. WARNING: These tokens will become part of the docker image.
+        description: "Pass arbitrary build_args into the docker-build process. This can be used to pass secrets tokens. WARNING: These tokens will become part of the docker image."
         type: string
         default: ""
-
 
 jobs:
   build:
