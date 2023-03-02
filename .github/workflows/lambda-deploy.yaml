@@ -1,8 +1,5 @@
 name: Deploy Lambda
 
-description: Deploy AWS Lambda without using AWS credentials.
-
-
 on:
   workflow_call:
     inputs:

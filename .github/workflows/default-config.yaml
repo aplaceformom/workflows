@@ -1,7 +1,5 @@
 name: Default Config Settings
 
-description: "Produce a stack of outputs which contain smoe default configuration information which is relivant to our typical deployment process."
-
 on:
   workflow_call:
     inputs:
