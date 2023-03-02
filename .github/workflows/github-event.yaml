@@ -1,0 +1,8 @@
+name: GitHub Event
+
+description: Disply the GitHub Event object
+
+jobs:
+  runs-on: ubuntu-latest
+  steps:
+    run: printf '%s' '${{ github.event }}' | jq .
