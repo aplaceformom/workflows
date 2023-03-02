@@ -64,7 +64,7 @@ on:
 
 jobs:
   config:
-    uses: aplaceformom/workflows/.github/workflows/default-config.yaml@master
+    uses: aplaceformom/workflows/.github/workflows/default-config.yaml@main
     with:
       application-role: ${{ inputs.application-role }}
       deployment-role: ${{ inputs.deployment-role }}
