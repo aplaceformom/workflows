@@ -52,7 +52,7 @@ jobs:
     needs: [config]
     permissions:
       id-token: write
-      repository-projects: read
+      contents: read
     steps:
     - name: 'Configure AWS credentials'
       uses: aws-actions/configure-aws-credentials@v1
