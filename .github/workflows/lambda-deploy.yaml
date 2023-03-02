@@ -63,6 +63,9 @@ jobs:
   deploy:
     needs: [config]
     runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      repository-projects: read
     steps:
     - uses: actions/download-artifact@v3
       with:
