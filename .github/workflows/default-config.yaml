@@ -64,7 +64,7 @@ jobs:
         (qa)    account_id='521312932954';;
         (*)     account_id='146283654498';;
         esac
-        project='${{ inputs.project || github.repository.name }}'
+        project='${{ inputs.project || github.event.repository.name }}'
         deploy_role="arn:aws:iam::${account_id}:role/github-${project}"
         app_role="arn:aws:iam::${account_id}:role/${project}"
         repo="${root_account_id}.dkr.ecr.${{ inputs.aws-region }}.amazonaws.com/${project}"
