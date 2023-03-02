@@ -32,6 +32,12 @@ on:
     secrets:
       build-args:
         description: "Pass arbitrary build_args into the docker-build process. This can be used to pass secrets tokens. WARNING: These tokens will become part of the docker image."
+      token:
+        description: Auth token to use, default to github.token
+        required: false
+
+env:
+  GITHUB_TOKEN: ${{ secrets.token == '' && secrets.token || github.token }}
 
 jobs:
   config:
@@ -50,8 +56,6 @@ jobs:
     steps:
     - name: 'Configure AWS credentials'
       uses: aws-actions/configure-aws-credentials@v1
-      env:
-          GITHUB_TOKEN: ${{ github.token }}
       with:
         role-to-assume: ${{ needs.config.outputs.deployment-role }}
         aws-region: ${{ needs.config.outputs.aws-region }}

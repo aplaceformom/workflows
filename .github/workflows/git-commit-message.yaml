@@ -1,7 +1,15 @@
 ---
 name: git-commit-check
 
-on: [workflow_call]
+on:
+  workflow_call:
+    secrets:
+      token:
+        description: Auth token to use, default to github.token
+        required: false
+
+env:
+  GITHUB_TOKEN: ${{ secrets.token == '' && secrets.token || github.token }}
 
 jobs:
   check-commit-message:
@@ -41,8 +49,6 @@ jobs:
 
       - name: Conventional Commit Message
         if: ${{ false }}
-        env:
-          GITHUB_TOKEN: ${{ secrets.token == '' && secrets.token || github.token }}
         run: |
           set -- $(gh api "repos/{owner}/{repo}/pulls/${{ github.event.pull_request.number }}/commits" --jq '.[].sha')
           git fetch --deepen "$#"

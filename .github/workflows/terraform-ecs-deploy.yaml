@@ -61,6 +61,13 @@ on:
         description: Enable/disable build action debugging.
         type: boolean
         default: false
+    secrets:
+      token:
+        description: Auth token to use, default to github.token
+        required: false
+
+env:
+  GITHUB_TOKEN: ${{ secrets.token == '' && secrets.token || github.token }}
 
 jobs:
   config:
