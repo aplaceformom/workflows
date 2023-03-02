@@ -20,12 +20,12 @@ jobs:
   checks:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+    - uses: actions/checkout@v3
 
-      - uses: actions/setup-node@v2
-        with:
-          node-version: ${{ inputs.node-version }}
+    - uses: actions/setup-node@v2
+      with:
+        node-version: ${{ inputs.node-version }}
 
-      - env:
-          ENVIRONMENT: ${{ inputs.environment }}
-        run: npm ci && npm run ${{ inputs.run }}
+    - env:
+        ENVIRONMENT: ${{ inputs.environment }}
+      run: npm ci && npm run ${{ inputs.run }}
