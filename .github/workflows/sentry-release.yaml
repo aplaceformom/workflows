@@ -1,0 +1,44 @@
+name: Sentry Release
+
+on:
+  workflow_call:
+    inputs:
+      environment:
+        type: string
+        default: dev
+        description: Deployment environment
+      sourcemaps:
+        type: string
+        required: true
+        description: Sentry sourcemaps to upload.
+    secrets:
+      token:
+        descriptions: Sentry Auth Token
+        required: true
+
+jobs:
+  sentry:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - id: release
+        env:
+          SENTRY_AUTH_TOKEN: ${{ secrets.token }}
+          SENTRY_PROJECT: ${{ github.event.repository.name }}
+          SENTRY_DEPLOY_ENVIRONMENT: ${{ inputs.environment }}
+          SENTRY_ORG: 'a-place-for-mom'
+        run: |
+          set -xe
+          npm run build
+          # SENTRY_AUTH_TOKEN may be found at https://sentry.io/settings/account/api/auth-tokens/
+          # Install Sentry CLI
+          curl -sL https://sentry.io/get-cli/ | bash
+          # Create new Sentry release
+          SENTRY_RELEASE="$(sentry-cli releases propose-version)"
+          sentry-cli releases new -p "${{ github.event.repository.name }}" "${SENTRY_RELEASE}"
+          sentry-cli releases set-commits --auto "${SENTRY_RELEASE}"
+          sentry-cli releases files "${SENTRY_RELEASE}" upload-sourcemaps ${{ inputs.sourcemaps }}
+          sentry-cli releases finalize "${SENTRY_RELEASE}"
+          # Create new deploy for this Sentry release
+          sentry-cli releases deploys "${SENTRY_RELEASE}" new -e "${{ inputs.environment }}"
