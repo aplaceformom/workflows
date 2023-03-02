@@ -45,10 +45,10 @@ on:
         value: ${{ jobs.config.outputs.project }}
       application-role:
         description: "The role to attach to the application."
-        value: ${{ inputs.application-role || jobs.config.outputs.application-role }}
+        value: ${{ inputs.application-role != '' && inputs.application-role || jobs.config.outputs.application-role }}
       depoyment-role:
         description: "The role to use when deploying from this repo."
-        value: ${{ inputs.deployment-role || jobs.config.outputs.deployment-role }}
+        value: ${{ inputs.deployment-role != '' && inputs.deployment-role || jobs.config.outputs.deployment-role }}
 
 jobs:
   config:
