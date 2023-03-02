@@ -35,7 +35,7 @@ on:
 
 jobs:
   config:
-    uses: aplaceformom/workflows/.github/workflows/default-config.yaml@master
+    uses: aplaceformom/workflows/.github/workflows/default-config.yaml@main
     with:
       deployment-role: ${{ inputs.deployment-role }}
       ecr-repo: ${{ inputs.ecr-repo }}
