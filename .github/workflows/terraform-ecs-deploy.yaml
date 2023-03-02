@@ -14,7 +14,7 @@ on:
         description: Maximum number of nodes to scale-out to when autoscaling is enabled.
         default: 3
       environ:
-        description: A string describing the application environ in `{ key1="value", key2="value" }` format.
+        description: A string describing the application environ in `{ key1="/ssm/path/to/value1", key2="/ssm/path/to/value2" }` format.
         type: string
         required: false
       certificate:
@@ -37,10 +37,6 @@ on:
         description: Enable to place the application container into a publicly accessible network.
         type: boolean
         default: false
-      secrets:
-        description: A string describing the application environs that are set via SSM `{ key1="/ssm/path/to/var1", key2="/ssm/path/to/var2" }` format.
-        type: string
-        required: false
       destroy:
         description: Destroy the existing stack before deployment.
         type: boolean
@@ -90,4 +86,4 @@ jobs:
           label: ${{ inputs.version }}
           mem: ${{ inputs.mem }}
           public: ${{ inputs.public }}
-          secrets: ${{ inputs.secrets }}
+          secrets: ${{ inputs.environ }}
