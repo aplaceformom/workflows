@@ -75,40 +75,42 @@ jobs:
     needs: [config]
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+    - uses: actions/checkout@v3
 
-      - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v1
-        with:
-          role-to-assume: ${{ needs.config.outputs.deployment-role }}
-          aws-region: ${{ needs.config.outputs.aws-region }}
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v1
+      env:
+        GITHUB_TOKEN: ${{ github.token }}
+      with:
+        role-to-assume: ${{ needs.config.outputs.deployment-role }}
+        aws-region: ${{ needs.config.outputs.aws-region }}
 
-      - name: Init Project
-        id: project
-        uses: apfm-actions/terraform-project-base-action@master
-        with:
-          project: ${{ github.event.repository.name }}
-          workspace: ${{ inputs.stage }}
-          owner: ${{ inputs.owner }}
-          email: ${{ inputs.email }}
-          tf_assume_role: TerraformApply
-          remote_state_bucket: apfm-terraform-remotestate
-          remote_lock_table: terraform-statelock
-          shared_state_key: terraform/apfm.tfstate
+    - name: Init Project
+      id: project
+      uses: apfm-actions/terraform-project-base-action@master
+      with:
+        project: ${{ github.event.repository.name }}
+        workspace: ${{ inputs.stage }}
+        owner: ${{ inputs.owner }}
+        email: ${{ inputs.email }}
+        tf_assume_role: TerraformApply
+        remote_state_bucket: apfm-terraform-remotestate
+        remote_lock_table: terraform-statelock
+        shared_state_key: terraform/apfm.tfstate
 
-      - name: Deploy ECS container
-        uses: apfm-actions/terraform-ecs-app-action@v1
-        with:
-          autoscaling: ${{ inputs.autoscaling }}
-          autoscaling_max: ${{ inputs.autoscaling_max }}
-          autoscaling_min: ${{ inputs.autoscaling_min }}
-          certifcate: ${{ inputs.certificate }}
-          certificate_alt_names: ${{ inputs.certificate_alt_names }}
-          cpu: ${{ inputs.cpu }}
-          debug: ${{ inputs.debug }}
-          destroy: ${{ inputs.destroy }}
-          image: ${{ inputs.image }}
-          label: ${{ inputs.version }}
-          mem: ${{ inputs.mem }}
-          public: ${{ inputs.public }}
-          secrets: ${{ inputs.environ }}
+    - name: Deploy ECS container
+      uses: apfm-actions/terraform-ecs-app-action@v1
+      with:
+        autoscaling: ${{ inputs.autoscaling }}
+        autoscaling_max: ${{ inputs.autoscaling_max }}
+        autoscaling_min: ${{ inputs.autoscaling_min }}
+        certifcate: ${{ inputs.certificate }}
+        certificate_alt_names: ${{ inputs.certificate_alt_names }}
+        cpu: ${{ inputs.cpu }}
+        debug: ${{ inputs.debug }}
+        destroy: ${{ inputs.destroy }}
+        image: ${{ inputs.image }}
+        label: ${{ inputs.version }}
+        mem: ${{ inputs.mem }}
+        public: ${{ inputs.public }}
+        secrets: ${{ inputs.environ }}

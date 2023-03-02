@@ -70,6 +70,8 @@ jobs:
         path: lambda.zip
 
     - uses: aws-actions/configure-aws-credentials@v1
+      env:
+          GITHUB_TOKEN: ${{ github.token }}
       with:
         role-to-assume: ${{ needs.config.outputs.deployment-role }}
         aws-region: ${{ needs.config.outputs.aws-region }}
