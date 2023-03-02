@@ -46,7 +46,7 @@ on:
       application-role:
         description: "The role to attach to the application."
         value: ${{ jobs.config.outputs.application-role }}
-      depoyment-role:
+      deployment-role:
         description: "The role to use when deploying from this repo."
         value: ${{ jobs.config.outputs.deployment-role }}
 
@@ -61,7 +61,7 @@ jobs:
     steps:
     - id: config
       run: |
-        set -ex
+        : config
         root_account_id='373477481654' # This feels like it should go somewhere else
         case '${{ inputs.env }}' in
         (prod)  account_id='451834275279';;
