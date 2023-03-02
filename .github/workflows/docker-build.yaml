@@ -45,6 +45,12 @@ jobs:
     runs-on: ubuntu-latest
     needs: [config]
     steps:
+    - id: debug
+      run: |
+        echo 'deployment-role: ${{ needs.config.outputs.deployment-role }}'
+        echo 'application-role: ${{ needs.config.outputs.application-role }}'
+        echo 'aws-region: ${{ needs.config.outputs.aws-region }}'
+
     - name: 'Configure AWS credentials'
       uses: aws-actions/configure-aws-credentials@v1
       with:
