@@ -80,7 +80,7 @@ jobs:
         if aws lambda get-function --function-name '${{ inputs.function-name }}' --region '${{ needs.config.outputs.aws-region }}' > /dev/null 2>&1; then
           lambda_update=true
         fi
-        echo "update=${lambda_update}" >> "${GITHUB_OUTPUTS}"
+        echo "update=${lambda_update}" >> "${GITHUB_OUTPUT}"
 
     - id: create
       if: ! ${{ steps.lambda.outputs.update }}
