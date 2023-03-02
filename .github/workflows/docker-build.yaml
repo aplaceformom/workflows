@@ -31,10 +31,9 @@ on:
         default: false
     secrets:
       build-args:
-        description: Pass arbitrary build_args into the docker-build process. This can be used to pass secrets tokens. WARNING: These tokens will become part of the docker image.
+        description: "Pass arbitrary build_args into the docker-build process. This can be used to pass secrets tokens. WARNING: These tokens will become part of the docker image."
         type: string
         default: ""
-
 
 jobs:
   build:
