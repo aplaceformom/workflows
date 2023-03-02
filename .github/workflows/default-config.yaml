@@ -11,6 +11,10 @@ on:
         description: "AWS Region to deploy into."
         type: string
         default: "us-west-2"
+      ecr-repo:
+        description: "The URI to the ECR repo to use"
+        type: string
+        required: false
       env:
         description: "Target environment for deploying into"
         type: string
