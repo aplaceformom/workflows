@@ -1,0 +1,93 @@
+name: Terraform ECS Deploy
+
+on:
+  workflow_call:
+    inputs:
+      autoscaling:
+        description: Enable/disable autoscaling
+        type: boolean
+        default: true
+      autoscaling_min:
+        description: Minimum number of nodes to keep running when autoscaling enabled.
+        default: 1
+      autoscaling_max:
+        description: Maximum number of nodes to scale-out to when autoscaling is enabled.
+        default: 3
+      environ:
+        description: A string describing the application environ in `{ key1="value", key2="value" }` format.
+        type: string
+        required: false
+      certificate:
+        description: The name of an existing AWS ACM certificate to use. This cert must already exist.
+        type: string
+        required: false
+      certificate_alt_names:
+        description: A comma separated list of subjective alternative names to add to the SSL certificate. Ignored if `certificate` is specific.
+        type: string
+        required: false
+      cpu:
+        description: Allocated per-container CPU time quanta in AWS vCPU units.
+        type: number
+        default: 256
+      mem:
+        description: Allocated per-container memory size for the target application.
+        type: number
+        default: 512
+      public:
+        description: Enable to place the application container into a publicly accessible network.
+        type: boolean
+        default: false
+      secrets:
+        description: A string describing the application environs that are set via SSM `{ key1="/ssm/path/to/var1", key2="/ssm/path/to/var2" }` format.
+        type: string
+        required: false
+      destroy:
+        description: Destroy the existing stack before deployment.
+        type: boolean
+        default: false
+      debug:
+        description: Enable/disable build action debugging.
+        type: boolean
+        default: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          role-to-assume: ${{ inputs.role-to-assume }}
+          aws-region: us-west-2
+
+      - name: Init Project
+        id: project
+        uses: apfm-actions/terraform-project-base-action@master
+        with:
+          project: ${{ github.event.repository.name }}
+          workspace: ${{ inputs.environment }}
+          owner: ${{ inputs.owner }}
+          email: ${{ inputs.email }}
+          tf_assume_role: TerraformApply
+          remote_state_bucket: apfm-terraform-remotestate
+          remote_lock_table: terraform-statelock
+          shared_state_key: terraform/apfm.tfstate
+
+      - name: Deploy ECS container
+        uses: apfm-actions/terraform-ecs-app-action@v1
+        with:
+          autoscaling: ${{ inputs.autoscaling }}
+          autoscaling_max: ${{ inputs.autoscaling_max }}
+          autoscaling_min: ${{ inputs.autoscaling_min }}
+          certifcate: ${{ inputs.certificate }}
+          certificate_alt_names: ${{ inputs.certificate_alt_names }}
+          cpu: ${{ inputs.cpu }}
+          debug: ${{ inputs.debug }}
+          destroy: ${{ inputs.destroy }}
+          image: ${{ inputs.image }}
+          label: ${{ inputs.version }}
+          mem: ${{ inputs.mem }}
+          public: ${{ inputs.public }}
+          secrets: ${{ inputs.secrets }}
