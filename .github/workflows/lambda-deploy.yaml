@@ -55,9 +55,9 @@ jobs:
   config:
     uses: aplaceformom/workflows/.github/workflows/default-config.yaml@main
       with:
-        deploy-role: ${{ inputs.deployment-role || '' }}
-        application-role: ${{ inputs.function-role  || '' }}
-        aws-region: ${{ inputs.aws-region || '' }}
+        deploy-role: ${{ inputs.deployment-role || null }}
+        application-role: ${{ inputs.function-role  || null }}
+        aws-region: ${{ inputs.aws-region || null }}
 
 
   deploy:
