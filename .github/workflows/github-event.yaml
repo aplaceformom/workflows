@@ -2,6 +2,8 @@ name: GitHub Event
 
 description: Disply the GitHub Event object
 
+on: [workflow_call]
+
 jobs:
   event:
     runs-on: ubuntu-latest
