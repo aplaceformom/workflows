@@ -45,10 +45,10 @@ on:
         value: ${{ jobs.config.outputs.project }}
       application-role:
         description: "The role to attach to the application."
-        value: ${{ inputs.application-role != '' && inputs.application-role || jobs.config.outputs.application-role }}
+        value: ${{ jobs.config.outputs.application-role }}
       depoyment-role:
         description: "The role to use when deploying from this repo."
-        value: ${{ inputs.deployment-role != '' && inputs.deployment-role || jobs.config.outputs.deployment-role }}
+        value: ${{ jobs.config.outputs.deployment-role }}
 
 jobs:
   config:
@@ -70,10 +70,12 @@ jobs:
         (*)     account_id='146283654498';;
         esac
         project='${{ inputs.project || github.event.repository.name }}'
-        deploy_role="arn:aws:iam::${account_id}:role/github-${project}"
-        app_role="arn:aws:iam::${account_id}:role/${project}"
         repo="${root_account_id}.dkr.ecr.${{ inputs.aws-region }}.amazonaws.com/${project}"
         echo "ecr-repo=${repo}" >> "${GITHUB_OUTPUT}"
-        echo "application-role=${app_role}" >> "${GITHUB_OUTPUT}"
+        deploy_role='${{ inputs.deployment-role }}'
+        deploy_role="${deploy_role:=arn:aws:iam::${account_id}:role/github-${project}}"
         echo "deployment-role=${deploy_role}" >> "${GITHUB_OUTPUT}"
+        app_role='${{ inputs.application-role }}'
+        app_role="${app_role:=arn:aws:iam::${account_id}:role/${project}}"
+        echo "application-role=${app_role}" >> "${GITHUB_OUTPUT}"
         printf 'short-rev=%.7s\n' '${{ github.sha }}' >> "${GITHUB_OUTPUT}"
