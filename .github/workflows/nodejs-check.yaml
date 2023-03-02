@@ -11,6 +11,10 @@ on:
         description: Node.js version to use
         type: string
         required: true
+      run:
+        description: Which checks to run. E.g. `check:ci`
+        type: string
+        required: true
 
 jobs:
   checks:
@@ -18,12 +22,10 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - id: setup
-        uses: actions/setup-node@v2
+      - uses: actions/setup-node@v2
         with:
           node-version: ${{ inputs.node-version }}
 
-      - id: check
-        env:
+      - env:
           ENVIRONMENT: ${{ inputs.environment }}
-        run: npm ci && npm run check
+        run: npm ci && npm run ${{ inputs.run }}
