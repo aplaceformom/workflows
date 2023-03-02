@@ -71,13 +71,13 @@ jobs:
 
     - uses: aws-actions/configure-aws-credentials@v1
       with:
-        role-to-assume: ${{ jobs.config.outputs.deployment-role }}
-        aws-region: ${{ jobs.config.outputs.aws-region }}
+        role-to-assume: ${{ needs.config.outputs.deployment-role }}
+        aws-region: ${{ needs.config.outputs.aws-region }}
 
     - id: lambda
       run: |
         lambda_update=false
-        if aws lambda get-function --function-name '${{ inputs.function-name }}' --region '${{ jobs.config.outputs.aws-region }}' > /dev/null 2>&1; then
+        if aws lambda get-function --function-name '${{ inputs.function-name }}' --region '${{ needs.config.outputs.aws-region }}' > /dev/null 2>&1; then
           lambda_update=true
         fi
         echo "update=${lambda_update}" >> "${GITHUB_OUTPUTS}"
@@ -87,7 +87,7 @@ jobs:
       run: |
         : Create Lambda
         set --
-        set -- "$@" --region '${{ jobs.config.outputs.aws-region }}'
+        set -- "$@" --region '${{ needs.config.outputs.aws-region }}'
         set -- "$@" --function-name '${{ inputs.function-name }}'
         set -- "$@" --zip-file 'lambda.zip'
         set -- "$@" --runtime '${{ inputs.runtime }}'
@@ -103,7 +103,7 @@ jobs:
       run: |
         : Update Lambda Code
         set --
-        set -- "$@" --region '${{ jobs.config.outputs.aws-region }}'
+        set -- "$@" --region '${{ needs.config.outputs.aws-region }}'
         set -- "$@" --function-name '${{ inputs.function-name }}'
         set -- "$@" --zip-file 'lambda.zip'
         set -- "$@" ${{ inputs.publish && '--publish' || '--no-publish' }}
@@ -114,7 +114,7 @@ jobs:
       run: |
         : Update Lambda Config
         set --
-        set -- "$@" --region '${{ jobs.config.outputs.aws-region }}'
+        set -- "$@" --region '${{ needs.config.outputs.aws-region }}'
         set -- "$@" --function-name '${{ inputs.function-name }}'
         set -- "$@" --runtime '${{ inputs.runtime }}'
         set -- "$@" --timeout '${{ inputs.timeout }}'
