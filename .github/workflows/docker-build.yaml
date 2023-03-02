@@ -44,7 +44,7 @@ jobs:
         project="${name#*/}"
         role="arn:aws:iam::${account_id}:role/${project}"
         repo="${account_id}.dkr.ecr.${{ inputs.aws-region }}.amazonaws.com/${project}"
-        echo "ecr-repo=${{ inputs.ecr-repo != '' && inputs.ecr-repo || "${repo}" }}" >> "${GITHUB_OUTPUTS}"
+        echo "ecr-repo=${{ inputs.ecr-repo != '' && inputs.ecr-repo || '${repo}' }}" >> "${GITHUB_OUTPUTS}"
         echo "role-to-assume=${{ inputs.role-to-assume != '' && inputs.role-to-assume || "${role}" }}" >> "${GITHUB_OUTPUTS}"
 
     - name: 'Configure AWS credentials'
