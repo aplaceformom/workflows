@@ -37,9 +37,9 @@ jobs:
   config:
     uses: aplaceformom/workflows/.github/workflows/default-config.yaml@main
     with:
-      deployment-role: ${{ inputs.deployment-role || null }}
-      ecr-repo: ${{ inputs.ecr-repo  || null }}
-      aws-region: ${{ inputs.aws-region || null }}
+      deployment-role: ${{ inputs.deployment-role || '' }}
+      ecr-repo: ${{ inputs.ecr-repo  || '' }}
+      aws-region: ${{ inputs.aws-region || '' }}
 
   build:
     runs-on: ubuntu-latest
