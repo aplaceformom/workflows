@@ -73,7 +73,7 @@ jobs:
         repo="${root_account_id}.dkr.ecr.${{ inputs.aws-region }}.amazonaws.com/${project}"
         echo "ecr-repo=${repo}" >> "${GITHUB_OUTPUT}"
         deploy_role='${{ inputs.deployment-role }}'
-        deploy_role="${deploy_role:=arn:aws:iam::${account_id}:role/github-${project}}"
+        deploy_role="${deploy_role:=arn:aws:iam::${account_id}:role/gh-deploy-${project}}"
         echo "deployment-role=${deploy_role}" >> "${GITHUB_OUTPUT}"
         app_role='${{ inputs.application-role }}'
         app_role="${app_role:=arn:aws:iam::${account_id}:role/${project}}"
