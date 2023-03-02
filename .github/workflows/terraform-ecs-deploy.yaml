@@ -6,13 +6,17 @@ on:
       autoscaling:
         description: Enable/disable autoscaling
         type: boolean
-        default: true
+        default: false
       autoscaling_min:
         description: Minimum number of nodes to keep running when autoscaling enabled.
         default: 1
       autoscaling_max:
         description: Maximum number of nodes to scale-out to when autoscaling is enabled.
         default: 3
+      email:
+        description: Email address of code owners/team.
+        type: string
+        required: true
       environ:
         description: A string describing the application environ in `{ key1="/ssm/path/to/value1", key2="/ssm/path/to/value2" }` format.
         type: string
@@ -33,10 +37,22 @@ on:
         description: Allocated per-container memory size for the target application.
         type: number
         default: 512
+      owner:
+        description: Team owning project.
+        type: string
+        required: true
       public:
         description: Enable to place the application container into a publicly accessible network.
         type: boolean
         default: false
+      stage:
+        description: CI/CD promotion stage. E.g. dev, qa, prod
+        type: string
+        default: dev
+      task-name:
+        description: Name of the ECS task. Defaults to using th repository name.
+        type: string
+        requird: false
       destroy:
         description: Destroy the existing stack before deployment.
         type: boolean
@@ -47,7 +63,16 @@ on:
         default: false
 
 jobs:
+  config:
+    uses: aplaceformom/workflows/.github/workflows/default-config.yaml@master
+    with:
+      application-role: ${{ inputs.application-role }}
+      deployment-role: ${{ inputs.deployment-role }}
+      project: ${{ inputs.task-name }}
+      aws-region: ${{ inputs.aws-region }}
+
   deploy:
+    needs: [config]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -55,15 +80,15 @@ jobs:
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:
-          role-to-assume: ${{ inputs.role-to-assume }}
-          aws-region: us-west-2
+          role-to-assume: ${{ jobs.config.outputs.deployment-role }}
+          aws-region: ${{ jobs.config.outputs.aws-region }}
 
       - name: Init Project
         id: project
         uses: apfm-actions/terraform-project-base-action@master
         with:
           project: ${{ github.event.repository.name }}
-          workspace: ${{ inputs.environment }}
+          workspace: ${{ inputs.stage }}
           owner: ${{ inputs.owner }}
           email: ${{ inputs.email }}
           tf_assume_role: TerraformApply
