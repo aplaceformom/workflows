@@ -35,6 +35,13 @@ on:
       token:
         description: Auth token to use, default to github.token
         required: false
+    outputs:
+      ecr-repo:
+        description:
+          value: ${{ steps.login-ecr.outputs.registry }}
+      ghcr-repo:
+        description:
+          value: ${{ steps.login-ghcr.outputs.registry }}
 
 env:
   GITHUB_TOKEN: ${{ secrets.token == '' && secrets.token || github.token }}

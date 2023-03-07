@@ -1,0 +1,66 @@
+name: ECS Deploy
+
+on:
+  workflow_call:
+    inputs:
+      task-definition:
+        description: 'The path to the ECS task definition JSON file'
+        required: true
+      container-name:
+        description: 'The name of the container defined in the containerDefinitions section of the ECS task definition'
+        required: true
+      image:
+        description: 'The URI of the container image to insert into the ECS task definition'
+        required: true
+      environment-variables:
+        description: 'Variables to add to the container. Each variable is of the form KEY=value, you can specify multiple variables with multi-line YAML strings.'
+        required: false
+    secrets:
+      token:
+        description: Auth token to use, default to github.token
+        required: false
+
+env:
+  GITHUB_TOKEN: ${{ secrets.token == '' && secrets.token || github.token }}
+
+jobs:
+  config:
+    uses: aplaceformom/workflows/.github/workflows/default-config.yaml@main
+    with:
+      application-role: ${{ inputs.application-role || null }}
+      deployment-role: ${{ inputs.deployment-role || null }}
+      project: ${{ inputs.task-name || null }}
+      aws-region: ${{ inputs.aws-region || null }}
+
+  deploy:
+    needs: [config]
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        with:
+          role-to-assume: ${{ needs.config.outputs.deployment-role }}
+          aws-region: ${{ needs.config.outputs.aws-region }}
+
+      - name: Render Amazon ECS task definition
+        id: render-task
+        uses: aws-actions/amazon-ecs-render-task-definition@v1
+        with:
+          task-definition: ${{ inputs.task-definition }}
+          container-name: ${{ inputs.container-name }}
+          image: ${{ inputs.image }}
+          environment-variables: ${{ inputs.environment-variables }}
+
+      - name: Deploy to Amazon ECS service
+        uses: aws-actions/amazon-ecs-deploy-task-definition@v1
+        with:
+          task-definition: ${{ steps.render-task.outputs.task-definition }}
+          service: ${{ inputs.container-name }}
+          cluster: default
