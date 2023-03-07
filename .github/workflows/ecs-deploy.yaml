@@ -19,6 +19,10 @@ on:
         description: 'Variables to add to the container. Each variable is of the form KEY=value, you can specify multiple variables with multi-line YAML strings.'
         required: false
         type: string
+      aws-region:
+        description: 'AWS Region to deploy in'
+        required: true
+        type: string
     secrets:
       token:
         description: Auth token to use, default to github.token
@@ -30,11 +34,6 @@ env:
 jobs:
   config:
     uses: aplaceformom/workflows/.github/workflows/default-config.yaml@main
-    with:
-      application-role: ${{ inputs.application-role || null }}
-      deployment-role: ${{ inputs.deployment-role || null }}
-      project: ${{ inputs.task-name || null }}
-      aws-region: ${{ inputs.aws-region || null }}
 
   deploy:
     needs: [config]
@@ -61,6 +60,7 @@ jobs:
           container-name: ${{ inputs.container-name }}
           image: ${{ inputs.image }}
           environment-variables: ${{ inputs.environment-variables }}
+          aws-region: ${{ needs.config.outputs.aws-region}}
 
       - name: Deploy to Amazon ECS service
         uses: aws-actions/amazon-ecs-deploy-task-definition@v1
