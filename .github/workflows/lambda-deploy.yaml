@@ -34,7 +34,7 @@ on:
         type: boolean
         default: false
       subnets:
-        description: Attach lambda to one of these subnets. Note: This is not usually required.
+        description: 'Attach lambda to one of these subnets. Note: This is not usually required.'
         type: string
         required: false
       security-groups:
