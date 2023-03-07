@@ -37,11 +37,11 @@ on:
         required: false
     outputs:
       ecr-repo:
-        description:
-          value: ${{ steps.login-ecr.outputs.registry }}
+        description: 'Elastic Container Registry URI'
+        value: ${{ steps.login-ecr.outputs.registry }}
       ghcr-repo:
-        description:
-          value: ${{ steps.login-ghcr.outputs.registry }}
+        description: 'GitHub Container Registry URI'
+        value: ${{ steps.login-ghcr.outputs.registry }}
 
 env:
   GITHUB_TOKEN: ${{ secrets.token == '' && secrets.token || github.token }}
