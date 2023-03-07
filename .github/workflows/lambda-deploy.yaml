@@ -34,7 +34,7 @@ on:
         type: boolean
         default: false
       subnets:
-        description: 'Attach lambda to one of these subnets. Note: This is not usually required.'
+        description: Attach lambda to one of these subnets. NOTE This is not usually required.
         type: string
         required: false
       security-groups:
@@ -60,10 +60,10 @@ env:
 jobs:
   config:
     uses: aplaceformom/workflows/.github/workflows/default-config.yaml@main
-      with:
-        deploy-role: ${{ inputs.deployment-role || null }}
-        application-role: ${{ inputs.function-role  || null }}
-        aws-region: ${{ inputs.aws-region || null }}
+    with:
+      deploy-role: ${{ inputs.deployment-role || null }}
+      application-role: ${{ inputs.function-role  || null }}
+      aws-region: ${{ inputs.aws-region || null }}
 
 
   deploy:
