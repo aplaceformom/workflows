@@ -2,6 +2,13 @@ name: Docker Build
 
 on:
   workflow_call:
+    outputs:
+      ecr-repo:
+        description: "Elastic Container Registry URI"
+        value: "${{ steps.login-ecr.outputs.registry }}"
+      ghcr-repo:
+        description: "GitHub Container Registry URI"
+        value: "${{ steps.login-ghcr.outputs.registry }}"
     inputs:
       name:
         description: "Docker image name in owner/app format. Defaults to github.event.repository.name"
@@ -33,15 +40,8 @@ on:
       build-args:
         description: "Pass arbitrary build_args into the docker-build process. This can be used to pass secrets tokens. WARNING: These tokens will become part of the docker image."
       token:
-        description: Auth token to use, default to github.token
+        description: "Auth token to use, default to github.token"
         required: false
-    outputs:
-      ecr-repo:
-        description: "Elastic Container Registry URI"
-        value: "${{ steps.login-ecr.outputs.registry }}"
-      ghcr-repo:
-        description: "GitHub Container Registry URI"
-        value: "${{ steps.login-ghcr.outputs.registry }}"
 
 env:
   GITHUB_TOKEN: ${{ secrets.token == '' && secrets.token || github.token }}
