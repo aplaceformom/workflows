@@ -8,9 +8,9 @@ on:
         type: string
         default: dev
       node-version:
-        description: Node.js version to use
+        description: Node.js version to use. Default: auto-detected
         type: string
-        required: true
+        required: false
       run:
         description: Which checks to run. E.g. `check:ci`
         type: string
@@ -22,9 +22,15 @@ jobs:
     steps:
     - uses: actions/checkout@v3
 
+    - id: node
+      run: |
+        node_version='unknown'
+        test -f 'package.json' && node_version="$(jq -r .engines.node ./package.json)"
+        printf 'version=%s' "${node_version}" >> "${GITHUB_OUTPUT}"
+
     - uses: actions/setup-node@v2
       with:
-        node-version: ${{ inputs.node-version }}
+        node-version: ${{ inputs.node-version || steps.node.output.version }}
 
     - env:
         ENVIRONMENT: ${{ inputs.environment }}
