@@ -3,12 +3,49 @@ name: pre-commit
 
 on:
   workflow_call:
+    inputs:
+      node-version:
+        type: string
+        description: "Node.js version to use when running Husky. Default: autodetect"
+        required: false
 
 env:
   DEBIAN_FRONTEND: noninteractive
 
 jobs:
+  config:
+    runs-on: ubuntu-latest
+    outputs:
+      node-version: ${{ steps.node.outputs.version }}
+      pre-commit: ${{ steps.pre-commit.outputs.detected }}
+      husky: ${{ steps.husky.outputs.detected }}
+    steps:
+      - uses: actions/checkout@v3
+      - id: pre-commit
+        run: |
+          : Looking for .pre-commit-config.yaml
+          set -x
+          pre_commit='true'
+          test -f '.pre-commit-config.yaml' || pre_commit='false'
+          printf 'detected=%s\n' "${pre_commit}" | tee -a "${GITHUB_OUTPUT}"
+      - id: husky
+        run: |
+          : Looking for .husky/pre-commit
+          set -x
+          husky='true'
+          test -f '.husky/pre-commit' || husky='false'
+          printf 'detected=%s\n' "${husky}" | tee -a "${GITHUB_OUTPUT}"
+      - id: node
+        run: |
+          : Detecting Node.js version
+          node_version='unknown'
+          test -f 'package.json' && node_version="$(jq -r .engines.node ./package.json)"
+          printf 'version=%s\n' "${node_version}" | tee -a "${GITHUB_OUTPUT}"
+
+
   pre-commit:
+    needs: [config]
+    if: ${{ needs.config.outputs.pre-commit == 'true' }}
     runs-on: ubuntu-latest
     permissions:
       id-token: write
@@ -26,3 +63,21 @@ jobs:
           restore-keys: ${{ steps.pre-commit-cache.outputs.prefix }}-
 
       - uses: pre-commit/action@v1.0.1
+
+  husky:
+    needs: [config]
+    if: ${{ needs.config.outputs.husky == 'true' }}
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: actions/setup-node@v2
+        with:
+          node-version: ${{ inputs.node-version || needs.config.output.node-version }}
+
+      - run: |
+          npm ci
+          .husky/pre-commit
