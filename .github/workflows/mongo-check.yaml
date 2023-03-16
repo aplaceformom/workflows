@@ -17,7 +17,7 @@ on:
         required: false
       node-env:
         description: 'The NODE_ENV we are targetting'
-        type: stirng
+        type: string
         default: development
       action:
         description: 'NPM action to run'
