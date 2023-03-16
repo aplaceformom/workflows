@@ -19,6 +19,10 @@ on:
         description: 'NPM action to run'
         type: string
         required: true
+      apollo-key:
+        description: 'The Apollo Key'
+        type: string
+        required: true
       schema-file:
         description: 'Path to schema file'
         type: string
