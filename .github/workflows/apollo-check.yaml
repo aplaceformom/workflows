@@ -67,7 +67,7 @@ jobs:
       with:
         action: ${{ inputs.action }}
         localSchemaFile: ${{ inputs.schema-file }}
-          key: ${{ inputs.apollo-key }}
-          variant: ${{ inputs.environment }}
-          serviceName: ${{ inputs.service-name }}
-          serviceURL: ${{ inputs.service-url }}
+        key: ${{ inputs.apollo-key }}
+        variant: ${{ inputs.environment }}
+        serviceName: ${{ inputs.service-name }}
+        serviceURL: ${{ inputs.service-url }}
