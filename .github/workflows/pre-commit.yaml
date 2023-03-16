@@ -8,11 +8,17 @@ on:
         type: string
         description: "Node.js version to use when running Husky. Default: autodetect"
         required: false
+      node-env:
+        description: 'The NODE_ENV we are targetting. Default: development'
+        type: string
+        default: development
 
 env:
   DEBIAN_FRONTEND: noninteractive
 
 jobs:
+  env:
+    NODE_ENV: ${{ inputs.node-env }}
   config:
     runs-on: ubuntu-latest
     outputs:

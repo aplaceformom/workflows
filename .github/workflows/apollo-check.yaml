@@ -15,6 +15,10 @@ on:
         description: 'Node.js version to use. Default: auto-detected'
         type: string
         required: false
+      node-env:
+        description: 'The NODE_ENV we are targetting. Default: development'
+        type: string
+        default: development
       action:
         description: 'NPM action to run'
         type: string
@@ -37,6 +41,8 @@ on:
         required: true
 
 jobs:
+  env:
+    NODE_ENV: ${{ inputs.node-env }}
   checks:
     runs-on: ubuntu-latest
     steps:
