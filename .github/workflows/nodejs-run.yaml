@@ -1,4 +1,4 @@
-name: Run a Node.js command (deprecated)
+name: Run a Node.js command
 
 on:
   workflow_call:
