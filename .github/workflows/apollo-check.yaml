@@ -19,10 +19,6 @@ on:
         description: 'NPM action to run'
         type: string
         required: true
-      apollo-key:
-        description: 'The Apollo Key'
-        type: string
-        required: true
       schema-file:
         description: 'Path to schema file'
         type: string
@@ -34,6 +30,10 @@ on:
       service-url:
         description: 'URL to service GraphQL endpoint'
         type: string
+        required: true
+    secrets:
+      apollo-key:
+        description: 'The Apollo Key'
         required: true
 
 jobs:
@@ -71,7 +71,7 @@ jobs:
       with:
         action: ${{ inputs.action }}
         localSchemaFile: ${{ inputs.schema-file }}
-        key: ${{ inputs.apollo-key }}
+        key: ${{ secrets.apollo-key }}
         variant: ${{ inputs.environment }}
         serviceName: ${{ inputs.service-name }}
         serviceURL: ${{ inputs.service-url }}
