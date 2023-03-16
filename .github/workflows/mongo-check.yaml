@@ -1,0 +1,67 @@
+name: Perform MongoDB Checks
+
+on:
+  workflow_call:
+    inputs:
+      environment:
+        description: 'Target environment'
+        type: string
+        default: dev
+      install-command:
+        description: 'Command to use to perform a Npm/Yarn/etc install. Default: npm install --production=false'
+        type: string
+        default: npm ci --production=false
+      node-version:
+        description: 'Node.js version to use. Default: auto-detected'
+        type: string
+        required: false
+      action:
+        description: 'NPM action to run'
+        type: string
+        required: true
+      repo:
+        description: 'Git repository to pull from'
+        type: string
+        default: ${{ github.repository }}
+      commit:
+        description: 'Git commit to checkout'
+        type: string
+        default: ${{ github.event.pull_request.head.sha }}
+
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+
+    - id: node
+      run: |
+        : detect node-version-file
+        node_version='null'
+        test -f 'package.json' && node_version="$(jq -r .engines.node ./package.json)"
+        if test "${node_version}" != 'null'; then
+          echo 'version-file=package.json'  >> "${GITHUB_OUTPUT}"
+        else
+          for version_file in .nvmrc .node-version .tool-versions; do
+            if test -f "${version_file}"; then
+              echo "version-file=${version_file}" >> "${GITHUB_OUTPUT}"
+              break
+            fi
+          done
+        fi
+
+    - uses: actions/setup-node@v2
+      with:
+        node-version: ${{ inputs.node-version }}
+        node-version-file: ${{ steps.node.output.version-file }}
+
+    - uses: bahmutov/npm-install@v1
+      with:
+        install-command: ${{ inputs.install-command }}
+
+    - uses: aplaceformom/actions-mongo-checks@main
+      with:
+        action: /validate
+        env: ${{ inputs.environment }}
+        repo: ${{ inputs.repo || github.repository }}
+        commit: ${{ inputs.commit || github.event.pull_request.head.sha }}
