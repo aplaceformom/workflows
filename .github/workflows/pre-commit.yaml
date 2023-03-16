@@ -79,5 +79,6 @@ jobs:
           node-version: ${{ inputs.node-version || needs.config.output.node-version }}
 
       - run: |
+          : Running Husky pre-commit
           npm ci
           .husky/pre-commit
