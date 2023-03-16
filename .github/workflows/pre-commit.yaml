@@ -17,14 +17,14 @@ env:
   DEBIAN_FRONTEND: noninteractive
 
 jobs:
-  env:
-    NODE_ENV: ${{ inputs.node-env }}
   config:
     runs-on: ubuntu-latest
     outputs:
       node-version: ${{ steps.node.outputs.version }}
       pre-commit: ${{ steps.pre-commit.outputs.detected }}
       husky: ${{ steps.husky.outputs.detected }}
+    env:
+      NODE_ENV: ${{ inputs.node-env }}
     steps:
       - uses: actions/checkout@v3
       - id: pre-commit

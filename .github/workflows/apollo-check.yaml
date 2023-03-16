@@ -41,10 +41,10 @@ on:
         required: true
 
 jobs:
-  env:
-    NODE_ENV: ${{ inputs.node-env }}
   checks:
     runs-on: ubuntu-latest
+    env:
+      NODE_ENV: ${{ inputs.node-env }}
     steps:
     - uses: actions/checkout@v3
 
