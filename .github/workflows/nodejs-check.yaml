@@ -1,4 +1,4 @@
-name: Run Node.js checks
+name: Run a Node.js command
 
 on:
   workflow_call:
@@ -24,13 +24,24 @@ jobs:
 
     - id: node
       run: |
-        node_version='unknown'
+        : detect node-version-file
+        node_version='null'
         test -f 'package.json' && node_version="$(jq -r .engines.node ./package.json)"
-        printf 'version=%s' "${node_version}" >> "${GITHUB_OUTPUT}"
+        if test "${node_version}" != 'null'; then
+          echo 'version-file=package.json'  >> "${GITHUB_OUTPUT}"
+        else
+          for version_file in .nvmrc .node-version .tool-versions; do
+            if test -f "${version_file}"; then
+              echo "version-file=${version_file}" >> "${GITHUB_OUTPUT}"
+              break
+            fi
+          done
+        fi
 
     - uses: actions/setup-node@v2
       with:
-        node-version: ${{ inputs.node-version || steps.node.output.version }}
+        node-version: ${{ inputs.node-version }}
+        node-version-file: ${{ steps.node.output.version-file }}
 
     - env:
         ENVIRONMENT: ${{ inputs.environment }}
