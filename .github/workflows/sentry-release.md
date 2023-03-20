@@ -1,13 +1,13 @@
 # Re-Usable Workflow: Sentry Release
 ## inputs
 #### environment
-- *type*: string
 - *default*: dev
 - *description*: Deployment environment
-#### sourcemaps
 - *type*: string
-- *required*: True
+#### sourcemaps
 - *description*: Sentry sourcemaps to upload.
+- *required*: True
+- *type*: string
 ## secrets
 #### token
 - *descriptions*: Sentry Auth Token

@@ -33,12 +33,20 @@ if __name__ == "__main__":
                     raise Exception("`on` section is not present.")
                 if "workflow_call" not in data[top].keys():
                     raise Exception("`on->workflow_call` section is not present.")
-                for itm_t in data[top]["workflow_call"].keys():
+                aKeys = list(data[top]["workflow_call"].keys())
+                aKeys.sort()
+                for itm_t in aKeys:
                     lines.append(f"## {itm_t}")
-                    for itm in data[top]["workflow_call"][itm_t].keys():
+                    ktypes = list(data[top]["workflow_call"][itm_t])
+                    ktypes.sort()
+                    for itm in ktypes:
                         lines.append(f"#### {itm}")
-                        for k, v in data[top]["workflow_call"][itm_t][itm].items():
-                            lines.append(f"- *{k}*: {v}")
+                        keys = list(data[top]["workflow_call"][itm_t][itm].keys())
+                        keys.sort()
+                        for k in keys:
+                            lines.append(
+                                f"- *{k}*: {data[top]['workflow_call'][itm_t][itm][k]}"
+                            )
                 with open(name, "w+") as fp:
                     fp.write("\n".join(lines))
             print("ok")
