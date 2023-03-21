@@ -1,52 +1,73 @@
 # Re-Usable Workflow: Deploy Lambda
 ## inputs
 #### artifact
-- *description*: The name of the lambda artifact to upload.
+The name of the lambda artifact to upload.
+
+
 #### aws-region
-- *default*: us-west-2
-- *description*: AWS Region to deploy the Lambda to.
-- *type*: string
+AWS Region to deploy the Lambda to.
+
+
+- *default*: __us-west-2__
+- *type*: __string__
 #### deployment-role
-- *description*: AWS IAM Role to assume when deploying the lambda
-- *required*: True
-- *type*: string
+AWS IAM Role to assume when deploying the lambda
+
+
+- *required*: __True__
+- *type*: __string__
 #### description
-- *description*: Description of Lambda
-- *required*: True
-- *type*: string
+Description of Lambda
+
+
+- *required*: __True__
+- *type*: __string__
 #### function-name
-- *description*: Name of the Lambda Function
-- *required*: True
-- *type*: string
+Name of the Lambda Function
+
+
+- *required*: __True__
+- *type*: __string__
 #### function-role
-- *description*: Name of AWS IAM role the lambda should executre as.
-- *required*: True
-- *type*: string
+Name of AWS IAM role the lambda should executre as.
+
+
+- *required*: __True__
+- *type*: __string__
 #### memory
-- *default*: 128
-- *description*: The amount of memory available to the function at runtime.  Increasing  the  function memory also increases its CPU allocation. The default value is 128 MB. The value can be any multiple of 1 MB.
-- *type*: number
+The amount of memory available to the function at runtime.  Increasing  the  function memory also increases its CPU allocation. The default value is 128 MB. The value can be any multiple of 1 MB.
+
+
+- *default*: __128__
+- *type*: __number__
 #### publish
-- *default*: False
-- *description*: Set to true to publish the first version of the function during creation/update.
-- *type*: boolean
+Set to true to publish the first version of the function during creation/update.
+
+
+- *type*: __boolean__
 #### runtime
-- *description*: The Lambda's runtime. E.g. python3.8, nodejs14.x, go1.x, dotnetcore3.1, etc
-- *required*: True
-- *type*: string
+The Lambda's runtime. E.g. python3.8, nodejs14.x, go1.x, dotnetcore3.1, etc
+
+
+- *required*: __True__
+- *type*: __string__
 #### security-groups
-- *description*: List security-groups to attach to the Lambda when launching on a VPC.
-- *required*: False
-- *type*: string
+List security-groups to attach to the Lambda when launching on a VPC.
+
+
+- *type*: __string__
 #### subnets
-- *description*: Attach lambda to one of these subnets. NOTE This is not usually required.
-- *required*: False
-- *type*: string
+Attach lambda to one of these subnets. NOTE This is not usually required.
+
+
+- *type*: __string__
 #### timeout
-- *default*: 3
-- *description*: The amount of time (in seconds) that Lambda allows a function to run before stopping it. The default is 3 seconds.  The  maximum  allowed value is 900 seconds. For more information, see Lambda execution en- vironment .
-- *type*: number
+The amount of time (in seconds) that Lambda allows a function to run before stopping it. The default is 3 seconds.  The  maximum  allowed value is 900 seconds. For more information, see Lambda execution en- vironment .
+
+
+- *default*: __3__
+- *type*: __number__
 ## secrets
 #### token
-- *description*: Auth token to use, default to github.token
-- *required*: False
+Auth token to use, default to github.token
+

@@ -10,9 +10,11 @@ on:
       autoscaling_min:
         description: Minimum number of nodes to keep running when autoscaling enabled.
         default: 1
+        type: number
       autoscaling_max:
         description: Maximum number of nodes to scale-out to when autoscaling is enabled.
         default: 3
+        type: number
       email:
         description: Email address of code owners/team.
         type: string

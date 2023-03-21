@@ -1,26 +1,35 @@
 # Re-Usable Workflow: ECS Deploy
 ## inputs
 #### aws-region
-- *description*: AWS Region to deploy in
-- *required*: True
-- *type*: string
+AWS Region to deploy in
+
+
+- *required*: __True__
+- *type*: __string__
 #### container-name
-- *description*: The name of the container defined in the containerDefinitions section of the ECS task definition
-- *required*: True
-- *type*: string
+The name of the container defined in the containerDefinitions section of the ECS task definition
+
+
+- *required*: __True__
+- *type*: __string__
 #### environment-variables
-- *description*: Variables to add to the container. Each variable is of the form KEY=value, you can specify multiple variables with multi-line YAML strings.
-- *required*: False
-- *type*: string
+Variables to add to the container. Each variable is of the form KEY=value, you can specify multiple variables with multi-line YAML strings.
+
+
+- *type*: __string__
 #### image
-- *description*: The URI of the container image to insert into the ECS task definition
-- *required*: True
-- *type*: string
+The URI of the container image to insert into the ECS task definition
+
+
+- *required*: __True__
+- *type*: __string__
 #### task-definition
-- *description*: The path to the ECS task definition JSON file
-- *required*: True
-- *type*: string
+The path to the ECS task definition JSON file
+
+
+- *required*: __True__
+- *type*: __string__
 ## secrets
 #### token
-- *description*: Auth token to use, default to github.token
-- *required*: False
+Auth token to use, default to github.token
+

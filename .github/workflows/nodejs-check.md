@@ -1,18 +1,25 @@
 # Re-Usable Workflow: Run a Node.js command (deprecated)
 ## inputs
 #### environment
-- *default*: dev
-- *description*: Target environment
-- *type*: string
+Target environment
+
+
+- *default*: __dev__
+- *type*: __string__
 #### install-command
-- *default*: npm ci --production=false
-- *description*: Command to use to perform a Npm/Yarn/etc install. Default: npm install --production=false
-- *type*: string
+Command to use to perform a Npm/Yarn/etc install. Default: npm install --production=false
+
+
+- *default*: __npm ci --production=false__
+- *type*: __string__
 #### node-version
-- *description*: Node.js version to use. Default: auto-detected
-- *required*: False
-- *type*: string
+Node.js version to use. Default: auto-detected
+
+
+- *type*: __string__
 #### run
-- *description*: Which checks to run. E.g. checks
-- *required*: True
-- *type*: string
+Which checks to run. E.g. checks
+
+
+- *required*: __True__
+- *type*: __string__
