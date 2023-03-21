@@ -54,7 +54,7 @@ on:
       task-name:
         description: Name of the ECS task. Defaults to using th repository name.
         type: string
-        requird: false
+        required: false
       destroy:
         description: Destroy the existing stack before deployment.
         type: boolean
