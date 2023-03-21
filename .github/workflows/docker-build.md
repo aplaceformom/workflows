@@ -1,41 +1,50 @@
 # Re-Usable Workflow: Docker Build
 ## inputs
 #### aws-region
-- *default*: us-west-2
-- *description*: AWS Region to deploy to.
-- *required*: False
-- *type*: string
+AWS Region to deploy to.
+
+
+- *default*: __us-west-2__
+- *type*: __string__
 #### deployment-role
-- *default*: 
-- *description*: AWS IAM Role to assume when deploying to ECR.
-- *required*: False
-- *type*: string
+AWS IAM Role to assume when deploying to ECR.
+
+
+- *type*: __string__
 #### ecr-repo
-- *default*: 
-- *description*: AWS ECR Repo to push to.
-- *required*: False
-- *type*: string
+AWS ECR Repo to push to.
+
+
+- *type*: __string__
 #### name
-- *description*: Docker image name in owner/app format. Defaults to github.event.repository.name
-- *required*: False
-- *type*: string
+Docker image name in owner/app format. Defaults to github.event.repository.name
+
+
+- *type*: __string__
 #### push
-- *default*: False
-- *description*: Enable to push built image to GHCR/ECR
-- *type*: boolean
+Enable to push built image to GHCR/ECR
+
+
+- *type*: __boolean__
 #### tag-suffix
-- *description*: Append the tag-suffix to the image tag.
-- *type*: string
+Append the tag-suffix to the image tag.
+
+
+- *type*: __string__
 ## outputs
 #### ecr-repo
-- *description*: Elastic Container Registry URI
-- *value*: ${{ jobs.build.login-ecr.outputs.registry }}
+Elastic Container Registry URI
+
+
 #### ghcr-repo
-- *description*: GitHub Container Registry URI
-- *value*: ${{ jobs.build.login-ghcr.outputs.registry }}
+GitHub Container Registry URI
+
+
 ## secrets
 #### build-args
-- *description*: Pass arbitrary build_args into the docker-build process. This can be used to pass secrets tokens. WARNING: These tokens will become part of the docker image.
+Pass arbitrary build_args into the docker-build process. This can be used to pass secrets tokens. WARNING: These tokens will become part of the docker image.
+
+
 #### token
-- *description*: Auth token to use, default to github.token
-- *required*: False
+Auth token to use, default to github.token
+

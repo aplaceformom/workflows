@@ -1,30 +1,43 @@
 # Re-Usable Workflow: Perform MongoDB Checks
 ## inputs
 #### action
-- *description*: NPM action to run
-- *required*: True
-- *type*: string
+NPM action to run
+
+
+- *required*: __True__
+- *type*: __string__
 #### commit
-- *default*: ${{ github.event.pull_request.head.sha }}
-- *description*: Git commit to checkout
-- *type*: string
+Git commit to checkout
+
+
+- *default*: __${{ github.event.pull_request.head.sha }}__
+- *type*: __string__
 #### environment
-- *default*: dev
-- *description*: Target environment
-- *type*: string
+Target environment
+
+
+- *default*: __dev__
+- *type*: __string__
 #### install-command
-- *default*: npm ci --production=false
-- *description*: Command to use to perform a Npm/Yarn/etc install. Default: npm install --production=false
-- *type*: string
+Command to use to perform a Npm/Yarn/etc install. Default: npm install --production=false
+
+
+- *default*: __npm ci --production=false__
+- *type*: __string__
 #### node-env
-- *default*: development
-- *description*: The NODE_ENV we are targetting
-- *type*: string
+The NODE_ENV we are targetting
+
+
+- *default*: __development__
+- *type*: __string__
 #### node-version
-- *description*: Node.js version to use. Default: auto-detected
-- *required*: False
-- *type*: string
+Node.js version to use. Default: auto-detected
+
+
+- *type*: __string__
 #### repo
-- *default*: ${{ github.repository }}
-- *description*: Git repository to pull from
-- *type*: string
+Git repository to pull from
+
+
+- *default*: __${{ github.repository }}__
+- *type*: __string__

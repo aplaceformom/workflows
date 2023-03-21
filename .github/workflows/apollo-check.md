@@ -1,38 +1,55 @@
 # Re-Usable Workflow: Perform Apollo Schema Check
 ## inputs
 #### action
-- *description*: NPM action to run
-- *required*: True
-- *type*: string
+NPM action to run
+
+
+- *required*: __True__
+- *type*: __string__
 #### environment
-- *default*: dev
-- *description*: Target environment
-- *type*: string
+Target environment
+
+
+- *default*: __dev__
+- *type*: __string__
 #### install-command
-- *default*: npm ci --production=false
-- *description*: Command to use to perform a Npm/Yarn/etc install. Default: npm install --production=false
-- *type*: string
+Command to use to perform a Npm/Yarn/etc install. Default: npm install --production=false
+
+
+- *default*: __npm ci --production=false__
+- *type*: __string__
 #### node-env
-- *default*: development
-- *description*: The NODE_ENV we are targetting. Default: development
-- *type*: string
+The NODE_ENV we are targetting. Default: development
+
+
+- *default*: __development__
+- *type*: __string__
 #### node-version
-- *description*: Node.js version to use. Default: auto-detected
-- *required*: False
-- *type*: string
+Node.js version to use. Default: auto-detected
+
+
+- *type*: __string__
 #### schema-file
-- *description*: Path to schema file
-- *required*: True
-- *type*: string
+Path to schema file
+
+
+- *required*: __True__
+- *type*: __string__
 #### service-name
-- *description*: Name of the service
-- *required*: True
-- *type*: string
+Name of the service
+
+
+- *required*: __True__
+- *type*: __string__
 #### service-url
-- *description*: URL to service GraphQL endpoint
-- *required*: True
-- *type*: string
+URL to service GraphQL endpoint
+
+
+- *required*: __True__
+- *type*: __string__
 ## secrets
 #### apollo-key
-- *description*: The Apollo Key
-- *required*: True
+The Apollo Key
+
+
+- *required*: __True__

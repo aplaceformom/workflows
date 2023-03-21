@@ -1,10 +1,13 @@
 # Re-Usable Workflow: pre-commit
 ## inputs
 #### node-env
-- *default*: development
-- *description*: The NODE_ENV we are targetting. Default: development
-- *type*: string
+The NODE_ENV we are targetting. Default: development
+
+
+- *default*: __development__
+- *type*: __string__
 #### node-version
-- *description*: Node.js version to use when running Husky. Default: autodetect
-- *required*: False
-- *type*: string
+Node.js version to use when running Husky. Default: autodetect
+
+
+- *type*: __string__

@@ -1,48 +1,62 @@
 # Re-Usable Workflow: Default Config Settings
 ## inputs
 #### application-role
-- *description*: Override the default application role.
-- *required*: False
-- *type*: string
+Override the default application role.
+
+
+- *type*: __string__
 #### aws-region
-- *default*: us-west-2
-- *description*: AWS Region to deploy into.
-- *type*: string
+AWS Region to deploy into.
+
+
+- *default*: __us-west-2__
+- *type*: __string__
 #### deployment-role
-- *description*: Override the default deployment role.
-- *required*: False
-- *type*: string
+Override the default deployment role.
+
+
+- *type*: __string__
 #### ecr-repo
-- *description*: The URI to the ECR repo to use
-- *required*: False
-- *type*: string
+The URI to the ECR repo to use
+
+
+- *type*: __string__
 #### env
-- *default*: dev
-- *description*: Target environment for deploying into
-- *type*: string
+Target environment for deploying into
+
+
+- *default*: __dev__
+- *type*: __string__
 #### project
-- *description*: Override the default project name.
-- *required*: False
-- *type*: string
+Override the default project name.
+
+
+- *type*: __string__
 ## outputs
 #### account-id
-- *description*: The account-id cooresponding to the target environment.
-- *value*: ${{ jobs.config.outputs.account-id }}
+The account-id cooresponding to the target environment.
+
+
 #### application-role
-- *description*: The role to attach to the application.
-- *value*: ${{ jobs.config.outputs.application-role }}
+The role to attach to the application.
+
+
 #### aws-region
-- *description*: The region to deploy into.
-- *value*: ${{ inputs.aws-region }}
+The region to deploy into.
+
+
 #### deployment-role
-- *description*: The role to use when deploying from this repo.
-- *value*: ${{ jobs.config.outputs.deployment-role }}
+The role to use when deploying from this repo.
+
+
 #### ecr-repo
-- *description*: The URI to the ECR repo to use
-- *value*: ${{ jobs.config.outputs.repo }}
+The URI to the ECR repo to use
+
+
 #### project
-- *description*: The project name.
-- *value*: ${{ jobs.config.outputs.project }}
+The project name.
+
+
 #### short-rev
-- *description*: The Git short rev of the sha that triggered the event.
-- *value*: ${{ jobs.config.outputs.short-rev }}
+The Git short rev of the sha that triggered the event.
+
