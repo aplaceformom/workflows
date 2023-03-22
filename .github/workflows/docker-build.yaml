@@ -3,10 +3,6 @@ name: Docker Build
 on:
   workflow_call:
     inputs:
-      name:
-        description: "Docker image name in owner/app format. Defaults to github.repository"
-        required: false
-        type: string
       deployment-role:
         description: "AWS IAM Role to assume when deploying to ECR."
         required: false
