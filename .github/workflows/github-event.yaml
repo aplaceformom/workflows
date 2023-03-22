@@ -6,4 +6,6 @@ jobs:
   event:
     runs-on: ubuntu-latest
     steps:
-      - run: printf '%s' '${{ toJSON(github.event) }}' | jq .
+      - run: |
+          printf '%s' '${{ toJSON(github.event) }}' | jq .
+          env | grep -e '^GITHUB'
