@@ -21,8 +21,10 @@ if __name__ == "__main__":
     if len(sys.argv) >= 2:
         args = sys.argv[1:]
         args.sort()
+        parnt = ["# A Place For Mom Re-Usable Workflows\n"]
         for arg in args:
             if os.path.isfile(arg):
+                print(f"Processing {arg}")
                 name = f'{arg.split(".y")[0]}.md'
                 lines = []
                 data = {}
@@ -32,17 +34,21 @@ if __name__ == "__main__":
                     raise Exception(
                         "No name element in this workflow. If indeed, that is what it is."
                     )
+                parnt.append(f"- [{data['name']}](./{name})")
                 lines.append(f"# Re-Usable Workflow: {data['name']}")
                 top = None
-                if "on" not in data.keys() and True in data.keys():
-                    top = True
-                elif "on" in data.keys() and True not in data.keys():
-                    top = "on"
-                else:
-                    raise Exception("`on` section is not present.")
-                if "workflow_call" not in data[top].keys():
-                    raise Exception("`on->workflow_call` section is not present.")
-                aKeys = list(data[top]["workflow_call"].keys())
+                try:
+                    if "on" not in data.keys() and True in data.keys():
+                        top = True
+                    elif "on" in data.keys() and True not in data.keys():
+                        top = "on"
+                    else:
+                        raise Exception("`on` section is not present.")
+                    if "workflow_call" not in data[top].keys():
+                        raise Exception("`on->workflow_call` section is not present.")
+                    aKeys = list(data[top]["workflow_call"].keys())
+                except Exception:
+                    continue
                 aKeys.sort()
                 for itm_t in aKeys:
                     lines.append(f"## {itm_t}")
@@ -87,3 +93,6 @@ if __name__ == "__main__":
                                 lines.append(f"- *{k}*: __{_tda}__")
                 with open(name, "w+") as fp:
                     fp.write("\n".join(lines))
+        parnt.append("\n")
+        with open("README.md", "w+") as fp:
+            fp.write("\n".join(parnt))
