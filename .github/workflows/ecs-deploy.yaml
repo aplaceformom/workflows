@@ -44,17 +44,23 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v1
+      - uses: aws-actions/configure-aws-credentials@v1
+        id: config
         env:
           GITHUB_TOKEN: ${{ github.token }}
         with:
           role-to-assume: ${{ needs.config.outputs.deployment-role }}
           aws-region: ${{ needs.config.outputs.aws-region }}
 
-      - name: Render Amazon ECS task definition
-        id: render-task
+      - id: create-task
+        needs: [config]
+        uses: aplaceformom/workflows/.github/workflows/github-event.yaml@main
+
+      - id: render-task
         uses: aws-actions/amazon-ecs-render-task-definition@v1
+        needs:
+          - config
+          - create-task
         with:
           task-definition: ${{ inputs.task-definition }}
           container-name: ${{ inputs.container-name }}
@@ -62,8 +68,8 @@ jobs:
           environment-variables: ${{ inputs.environment-variables }}
           aws-region: ${{ needs.config.outputs.aws-region}}
 
-      - name: Deploy to Amazon ECS service
-        uses: aws-actions/amazon-ecs-deploy-task-definition@v1
+      - uses: aws-actions/amazon-ecs-deploy-task-definition@v1
+        needs: [render-task]
         with:
           task-definition: ${{ steps.render-task.outputs.task-definition }}
           service: ${{ inputs.container-name }}
