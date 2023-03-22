@@ -16,11 +16,6 @@ AWS ECR Repo to push to.
 
 
 - *type*: __string__
-#### name
-Docker image name in owner/app format. Defaults to github.event.repository.name
-
-
-- *type*: __string__
 #### push
 Enable to push built image to GHCR/ECR
 
