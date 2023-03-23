@@ -1,5 +1,10 @@
 # A Place For Mom Workflow Integrations
 
+## Table of Contents
+
+1. [ssm2ecs]("/aplaceformom/workflows/blob/main/.github/scripts/README.md#ssm2ecspy")
+2. [grwrg]("/aplaceformom/workflows/blob/main/.github/scripts/README.md#grwrgpy")
+
 ## ssm2ecs.py
 
 ##### Synopsis
