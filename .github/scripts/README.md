@@ -3,7 +3,7 @@
 ## Table of Contents
 
 1. [ssm2ecs](https://github.com/aplaceformom/workflows/blob/main/.github/scripts/README.md#ssm2ecspy)
-2. [grwrg](https://github.com/aplaceformom/workflows/blob/main/.github/scripts/README.md#grwrgpy)
+2. [grwrg](https://github.com/aplaceformom/workflows/blob/main/.github/scripts/README.md#grwrgpy-github-re-usable-workflow-readme-generator)
 
 ## ssm2ecs.py
 
