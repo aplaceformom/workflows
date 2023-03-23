@@ -6,6 +6,11 @@ AWS Region to deploy to.
 
 - *default*: __us-west-2__
 - *type*: __string__
+#### deploy-tag
+Add this as an alias tag on the container, for deployments.
+
+
+- *type*: __string__
 #### deployment-role
 AWS IAM Role to assume when deploying to ECR.
 

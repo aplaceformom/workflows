@@ -18,6 +18,11 @@ on:
         required: false
         default: ""
         type: string
+      deploy-tag:
+        description: "Add this as an alias tag on the container, for deployments."
+        required: false
+        default: ""
+        type: string
       tag-suffix:
         description: "Append the tag-suffix to the image tag."
         type: string
@@ -83,6 +88,7 @@ jobs:
             suffix=${{ inputs.suffix != '' && '-${{ inputs.suffix }}' || '' }},onlatest=true
           tags: |
             type=sha,prefix=,format=short
+            ${{ inputs.deploy-tag != '' && ${{ inputs.deploy-tag }} || '' }}
 
       - id: login-ecr
         uses: aws-actions/amazon-ecr-login@v1
