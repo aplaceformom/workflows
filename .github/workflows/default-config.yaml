@@ -27,6 +27,10 @@ on:
         description: "Override the default project name."
         type: string
         required: false
+      ecr-root:
+        description: "Use the root ACR repository"
+        type: bool
+        default: true
     outputs:
       aws-region:
         description: "The region to deploy into."
@@ -39,7 +43,7 @@ on:
         value: ${{ jobs.config.outputs.account-id }}
       ecr-repo:
         description: "The URI to the ECR repo to use"
-        value: ${{ jobs.config.outputs.repo }}
+        value: ${{ jobs.config.outputs.ecr-repo }}
       project:
         description: "The project name."
         value: ${{ jobs.config.outputs.project }}
@@ -70,7 +74,8 @@ jobs:
         (*)     account_id='146283654498';;
         esac
         project='${{ inputs.project || github.event.repository.name }}'
-        repo="${root_account_id}.dkr.ecr.${{ inputs.aws-region }}.amazonaws.com/${project}"
+        test "${{ inputs.ecr-root }}" == 'false' || repo="${root_account_id}.dkr.ecr.${{ inputs.aws-region }}.amazonaws.com/${project}"
+        test "${{ inputs.ecr-root }}" == 'true'  || repo="${account_id}.dkr.ecr.${{ inputs.aws-region }}.amazonaws.com/${project}"
         echo "ecr-repo=${repo}" >> "${GITHUB_OUTPUT}"
         deploy_role='${{ inputs.deployment-role }}'
         deploy_role="${deploy_role:=arn:aws:iam::${account_id}:role/gh-deploy-${project}}"
