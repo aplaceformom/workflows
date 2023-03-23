@@ -6,8 +6,9 @@ Authors:
   Mike 'Fuzzy' Partin <mike.partin@aplaceformom.com>
   Jugal Patel <jugal.patel@aplaceformom.com>
 
-This script will templatize out a ECS task definition for consumption
-by the re-usable workflows in GH actions.
+This script will templatize out the environment and secret portions
+of an ECS task definition for consumption by the re-usable workflows
+in GH actions.
 """
 
 # Stdlib
@@ -43,7 +44,9 @@ def get_env(svc, tkn=" "):
 
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description="ECS task definition generator.")
+    parser = argparse.ArgumentParser(
+        description="ECS environment and secret configuration generator."
+    )
     parser.add_argument(
         "-A", "--appName", help="Specify the name of the service", required=True
     )
