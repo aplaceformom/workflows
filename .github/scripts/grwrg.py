@@ -25,7 +25,7 @@ if __name__ == "__main__":
         for arg in args:
             if os.path.isfile(arg):
                 print(f"Processing {arg}")
-                name = f'{arg.split(".y")[0]}.md'
+                name = f'{arg.split("/")[-1].split(".y")[0]}.md'
                 lines = []
                 data = {}
                 with open(arg, "r") as fp:
@@ -34,7 +34,7 @@ if __name__ == "__main__":
                     raise Exception(
                         "No name element in this workflow. If indeed, that is what it is."
                     )
-                parnt.append(f"- [{data['name']}](./{name})")
+                parnt.append(f"- [{data['name']}](./docs/{name})")
                 lines.append(f"# Re-Usable Workflow: {data['name']}")
                 top = None
                 try:
@@ -94,5 +94,5 @@ if __name__ == "__main__":
                 with open(name, "w+") as fp:
                     fp.write("\n".join(lines))
         parnt.append("\n")
-        with open("README.md", "w+") as fp:
+        with open("../README.md", "w+") as fp:
             fp.write("\n".join(parnt))
