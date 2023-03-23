@@ -12,5 +12,4 @@
 - [Run a Node.js command](./docs/nodejs-run.md)
 - [pre-commit](./docs/pre-commit.md)
 - [Sentry Release](./docs/sentry-release.md)
-- [Terraform ECS Deploy](./docs/terraform-ecs-deploy.md)
 

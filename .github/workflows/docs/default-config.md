@@ -21,6 +21,12 @@ The URI to the ECR repo to use
 
 
 - *type*: __string__
+#### ecr-root
+Use the root ACR repository
+
+
+- *default*: __True__
+- *type*: __boolean__
 #### env
 Target environment for deploying into
 

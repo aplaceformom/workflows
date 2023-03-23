@@ -21,6 +21,12 @@ AWS ECR Repo to push to.
 
 
 - *type*: __string__
+#### ecr-root
+Use the current account ECR repo or the root account ECR repo.
+
+
+- *default*: __True__
+- *type*: __boolean__
 #### push
 Enable to push built image to GHCR/ECR
 
