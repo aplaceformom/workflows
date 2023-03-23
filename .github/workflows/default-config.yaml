@@ -29,7 +29,7 @@ on:
         required: false
       ecr-root:
         description: "Use the root ACR repository"
-        type: bool
+        type: boolean
         default: true
     outputs:
       aws-region:
