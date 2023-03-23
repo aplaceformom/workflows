@@ -18,6 +18,10 @@ on:
         required: false
         default: ""
         type: string
+      ecr-root:
+        description: "Use the current account ECR repo or the root account ECR repo."
+        default: true
+        type: bool
       deploy-tag:
         description: "Add this as an alias tag on the container, for deployments."
         required: false
@@ -53,6 +57,7 @@ jobs:
     with:
       deployment-role: ${{ inputs.deployment-role || '' }}
       ecr-repo: ${{ inputs.ecr-repo  || '' }}
+      ecr-root: ${{ inputs.ecr-root }}
       aws-region: ${{ inputs.aws-region || '' }}
 
   build:
