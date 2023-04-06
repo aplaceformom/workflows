@@ -32,6 +32,11 @@ Enable to push built image to GHCR/ECR
 
 
 - *type*: __boolean__
+#### submodules
+Preform submodule checkouts as well.
+
+
+- *type*: __boolean__
 #### tag-suffix
 Append the tag-suffix to the image tag.
 

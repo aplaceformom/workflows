@@ -3,6 +3,11 @@ name: Docker Build
 on:
   workflow_call:
     inputs:
+      submodules:
+        description: "Preform submodule checkouts as well."
+        required: false
+        default: false
+        type: boolean
       deployment-role:
         description: "AWS IAM Role to assume when deploying to ECR."
         required: false
@@ -75,6 +80,7 @@ jobs:
           aws-region: ${{ needs.config.outputs.aws-region }}
 
       - uses: actions/checkout@v3
+        submodules: ${{ inputs.submodules }}
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v1
