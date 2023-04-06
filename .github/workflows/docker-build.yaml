@@ -80,7 +80,8 @@ jobs:
           aws-region: ${{ needs.config.outputs.aws-region }}
 
       - uses: actions/checkout@v3
-        submodules: ${{ inputs.submodules }}
+        with:
+          submodules: ${{ inputs.submodules }}
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v1
