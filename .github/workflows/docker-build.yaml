@@ -55,7 +55,7 @@ on:
 
 env:
   GITHUB_TOKEN: ${{ secrets.token == '' && secrets.token || github.token }}
-  SUBMODULE_REC: ${{ inputs.submodules == true && "recursive" || "false" }}
+  SUBMODULE_REC: ${{ inputs.submodules == true && 'recursive' || 'false' }}
 
 jobs:
   config:
