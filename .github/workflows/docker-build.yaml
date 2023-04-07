@@ -4,7 +4,7 @@ on:
   workflow_call:
     inputs:
       submodules:
-        description: "Preform submodule checkouts as well."
+        description: "Perform submodule checkouts as well."
         required: false
         default: false
         type: boolean
@@ -55,6 +55,7 @@ on:
 
 env:
   GITHUB_TOKEN: ${{ secrets.token == '' && secrets.token || github.token }}
+  SUBMODULE_REC: ${{ inputs.submodules == true && "recursive" || "false" }}
 
 jobs:
   config:
@@ -81,7 +82,7 @@ jobs:
 
       - uses: actions/checkout@v3
         with:
-          submodules: ${{ inputs.submodules }}
+          submodules: "${{ env.SUBMODULE_REC }}"
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v1
