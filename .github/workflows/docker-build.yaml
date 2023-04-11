@@ -39,6 +39,10 @@ on:
         description: "Enable to push built image to GHCR/ECR"
         type: boolean
         default: false
+      platform:
+        description: "<os-version> to process the build on. E.g. ubuntu-latest"
+        type: string
+        default: ubuntu-latest
     secrets:
       build-args:
         description: "Pass arbitrary build_args into the docker-build process. This can be used to pass secrets tokens. WARNING: These tokens will become part of the docker image."
@@ -67,7 +71,7 @@ jobs:
       aws-region: ${{ inputs.aws-region || '' }}
 
   build:
-    runs-on: ubuntu-latest
+    runs-on: ${{ inputs.platform }}
     needs: [config]
     permissions:
       id-token: write
