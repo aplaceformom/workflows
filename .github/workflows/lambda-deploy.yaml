@@ -17,6 +17,10 @@ on:
         description: Description of Lambda
         type: string
         required: true
+      handler:
+        description: Lambda file.entrypoint
+        type: string
+        defaul: index.handler
       runtime:
         description: The Lambda's runtime. E.g. python3.8, nodejs14.x, go1.x, dotnetcore3.1, etc
         type: string
@@ -96,6 +100,7 @@ jobs:
       run: |
         : Create Lambda
         set --
+        set -- "$@" --handler '${{ inputs.handler }}'
         set -- "$@" --region '${{ needs.config.outputs.aws-region }}'
         set -- "$@" --function-name '${{ inputs.function-name }}'
         set -- "$@" --zip-file 'lambda.zip'
@@ -123,6 +128,7 @@ jobs:
       run: |
         : Update Lambda Config
         set --
+        set -- "$@" --handler '${{ inputs.handler }}'
         set -- "$@" --region '${{ needs.config.outputs.aws-region }}'
         set -- "$@" --function-name '${{ inputs.function-name }}'
         set -- "$@" --runtime '${{ inputs.runtime }}'
@@ -130,4 +136,4 @@ jobs:
         set -- "$@" --memory-size '${{ inputs.memory }}'
         set -- "$@" --role '${{ inputs.function-role }}'
         set -- "$@" --description '${{ inputs.description }}'
-        aws lambda update-function-config "$@"
+        aws lambda update-function-configuration "$@"
