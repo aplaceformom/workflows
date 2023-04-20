@@ -20,7 +20,7 @@ on:
       handler:
         description: Lambda file.entrypoint
         type: string
-        defaul: index.handler
+        default: index.handler
       runtime:
         description: The Lambda's runtime. E.g. python3.8, nodejs14.x, go1.x, dotnetcore3.1, etc
         type: string
