@@ -5,6 +5,8 @@ on:
     inputs:
       artifact:
         description: The name of the lambda artifact to upload.
+        type: string
+        default: lambda
       function-name:
         description: Name of the Lambda Function
         type: string
