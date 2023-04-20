@@ -98,7 +98,7 @@ jobs:
         echo "update=${lambda_update}" >> "${GITHUB_OUTPUT}"
 
     - id: create
-      if: ! ${{ steps.lambda.outputs.update }}
+      if: ${{ steps.lambda.outputs.update != 'true' }}
       run: |
         : Create Lambda
         set --
@@ -115,7 +115,7 @@ jobs:
         aws lambda create-function "$@"
 
     - id: update-code
-      if: ${{ steps.lambda.outputs.update }}
+      if: ${{ steps.lambda.outputs.update == 'true' }}
       run: |
         : Update Lambda Code
         set --
