@@ -82,7 +82,7 @@ jobs:
     - uses: actions/download-artifact@v3
       with:
         name: ${{ inputs.artifact }}
-        path: lambda.zip
+        path: .
 
     - uses: aws-actions/configure-aws-credentials@v1
       with:
@@ -91,11 +91,18 @@ jobs:
 
     - id: lambda
       run: |
+        : Test if lambda exists
         lambda_update=false
         if aws lambda get-function --function-name '${{ inputs.function-name }}' --region '${{ needs.config.outputs.aws-region }}' > /dev/null 2>&1; then
           lambda_update=true
         fi
         echo "update=${lambda_update}" >> "${GITHUB_OUTPUT}"
+
+    - id: debug
+      run: |
+        : Debug lambda artifact
+        unzip -l lambda.zip
+        find .
 
     - id: create
       if: ${{ steps.lambda.outputs.update != 'true' }}
@@ -105,7 +112,7 @@ jobs:
         set -- "$@" --handler '${{ inputs.handler }}'
         set -- "$@" --region '${{ needs.config.outputs.aws-region }}'
         set -- "$@" --function-name '${{ inputs.function-name }}'
-        set -- "$@" --zip-file "file://${PWD}/lambda.zip"
+        set -- "$@" --zip-file "fileb://${PWD}/lambda.zip"
         set -- "$@" --runtime '${{ inputs.runtime }}'
         set -- "$@" --timeout '${{ inputs.timeout }}'
         set -- "$@" --memory-size '${{ inputs.memory }}'
@@ -121,7 +128,7 @@ jobs:
         set --
         set -- "$@" --region '${{ needs.config.outputs.aws-region }}'
         set -- "$@" --function-name '${{ inputs.function-name }}'
-        set -- "$@" --zip-file "file://${PWD}/lambda.zip"
+        set -- "$@" --zip-file "fileb://${PWD}/lambda.zip"
         set -- "$@" ${{ inputs.publish && '--publish' || '--no-publish' }}
         aws lambda update-function-code "$@"
 
