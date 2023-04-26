@@ -25,7 +25,7 @@ on:
       deploy-tag:
         description: "Add this as an alias tag on the container, for deployments."
         required: false
-        default: ""
+        default: latest
         type: string
       tag-suffix:
         description: "Append the tag-suffix to the image tag."
@@ -98,13 +98,18 @@ jobs:
           test -z "${{ inputs.tag-suffix }}" || tag_suffix='-${{ inputs.tag-suffix }}'
           images=
           tag_args=
-          for version in ${{ needs.config.outputs.short-rev }} latest; do
+          for version in ${{ needs.config.outputs.short-rev }} ${{ inputs.deploy-tag }} latest; do
             image="${{ needs.config.outputs.project }}:${version}${tag_suffix}"
-            images="${images} ${image} ghcr.io/aplaceformom/${image} ${{ steps.login-ecr.outputs.registry }}/aplaceformom/${image}"
+            images="${images} ${image} ghcr.io/aplaceformom/${image} ${{ steps.login-ecr.outputs.registry }}/${image}"
             tag_args="${tag_args} -t ${image} -t ghcr.io/aplaceformom/${image} -t ${{ steps.login-ecr.outputs.registry }}/${image}"
           done
           echo "images=${images}" >> "${GITHUB_OUTPUT}"
           echo "tag-args=${tag_args}" >> "${GITHUB_OUTPUT}"
+
+      - id: docker-pull
+        shell: bash
+        run: |
+          docker pull "ghcr.io/aplaceformom/${{ needs.config.outputs.project }}:latest" || :
 
       - id: docker-build
         run: |
@@ -112,8 +117,14 @@ jobs:
 
       - id: docker-push
         if: ${{ inputs.push }}
-        run:
-          docker push ${{ steps.docker-config.outputs.images }}
+        shell: bash
+        run: |
+          : Docker Push
+          set -e
+          for repo in ghcr.io/aplaceformom ${{ steps.login-ecr.outputs.registry }}; do
+            docker push --all-tags "${repo}/${{ needs.config.outputs.project }}" &
+          done
+          wait
 
       - if: always()
         run: |
