@@ -99,6 +99,15 @@ jobs:
         shell: bash
         run: |
           : Generate Docker Metadata
+          build_args() {
+          while read arg; do
+            arg="$(echo "${arg}" | sed -e 's/^[[:space:]]\+//;s/[[:space:]]\+$//')"
+            printf ' --build-arg "%s" ' "${arg}"
+          done<<EOF
+          ${{ secrets.build-args }}
+          EOF
+          printf '\n'
+          }
           tag_suffix=
           test -z "${{ inputs.tag-suffix }}" || tag_suffix='-${{ inputs.tag-suffix }}'
           images=
@@ -112,6 +121,8 @@ jobs:
           done
           echo "images=${images}" >> "${GITHUB_OUTPUT}"
           echo "tag-args=${tag_args}" >> "${GITHUB_OUTPUT}"
+          if test -n "${{ secrets.build-args }}"; then echo "build-args=$(build_args)" >> "${GITHUB_OUTPUT}"
+          else echo 'build-args=' >> "${GITHUB_OUTPUT}"; fi
 
       - id: docker-pull
         shell: bash
@@ -120,7 +131,7 @@ jobs:
 
       - id: docker-build
         run: |
-          docker build ${{ steps.docker-config.outputs.tag-args }} .
+          docker build ${{ steps.docker-config.outputs.build-args }} ${{ steps.docker-config.outputs.tag-args }} .
 
       - id: docker-push
         if: ${{ inputs.push }}
