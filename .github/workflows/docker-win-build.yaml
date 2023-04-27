@@ -112,10 +112,8 @@ jobs:
           test -z "${{ inputs.tag-suffix }}" || tag_suffix='-${{ inputs.tag-suffix }}'
           images=
           tag_args=
-          for version in ${{ needs.config.outputs.short-rev }} ${{ inputs.deploy-tag }} latest; do
+          for version in ${{ needs.config.outputs.short-rev }} ${{ inputs.deploy-tag }} "latest-$(date '+%Y%m%d-%H%M%SA')" latest; do
             image="${{ needs.config.outputs.project }}:${version}${tag_suffix}"
-            images="${images} ${image} ghcr.io/aplaceformom/${image} ${{ steps.login-ecr.outputs.registry }}/${image}"
-            image="${{ needs.config.outputs.project }}:latest-$(date '+%Y%m%d-%H%M%SA')"
             images="${images} ${image} ghcr.io/aplaceformom/${image} ${{ steps.login-ecr.outputs.registry }}/${image}"
             tag_args="${tag_args} -t ${image} -t ghcr.io/aplaceformom/${image} -t ${{ steps.login-ecr.outputs.registry }}/${image}"
           done
