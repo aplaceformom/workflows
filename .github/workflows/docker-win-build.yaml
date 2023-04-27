@@ -13,6 +13,10 @@ on:
         required: false
         default: us-west-2
         type: string
+      env:
+        description: "Target environment for deploying into"
+        type: string
+        default: "dev"
       ecr-repo:
         description: "AWS ECR Repo to push to."
         required: false
@@ -63,6 +67,7 @@ jobs:
       ecr-repo: ${{ inputs.ecr-repo  || '' }}
       ecr-root: ${{ inputs.ecr-root }}
       aws-region: ${{ inputs.aws-region || '' }}
+      env: ${{ inputs.env || 'dev' }}
 
   build:
     runs-on: windows-${{ inputs.windows-version }}
