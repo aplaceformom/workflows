@@ -108,7 +108,7 @@ jobs:
           images: |
             ghcr.io/${{ github.repository }}
             ${{ needs.config.outputs.ecr-repo }}
-          flavor:
+          flavor: |
             latest=true
             suffix=${{ inputs.suffix != '' && '-${{ inputs.suffix }}' || '' }},onlatest=true
           tags: |
