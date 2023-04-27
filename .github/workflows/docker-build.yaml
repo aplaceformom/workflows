@@ -30,7 +30,7 @@ on:
       deploy-tag:
         description: "Add this as an alias tag on the container, for deployments."
         required: false
-        default: ""
+        default: latest
         type: string
       driver-opts:
         description: "Driver-opts to pass to buildx."
