@@ -113,6 +113,7 @@ jobs:
             suffix=${{ inputs.suffix != '' && '-${{ inputs.suffix }}' || '' }},onlatest=true
           tags: |
             type=sha,prefix=,format=short
+            type=schedule,pattern={{date 'YYYYMMDD-hhmmss'}},prefix="latest-"
             ${{ inputs.deploy-tag != '' && inputs.deploy-tag || '' }}
 
       - id: login-ecr
