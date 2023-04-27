@@ -108,12 +108,10 @@ jobs:
           images: |
             ghcr.io/${{ github.repository }}
             ${{ needs.config.outputs.ecr-repo }}
-          flavor: |
-            latest=true
-            suffix=${{ inputs.suffix != '' && '-${{ inputs.suffix }}' || '' }},onlatest=true
           tags: |
-            type=sha,prefix=,format=short
-            type=schedule,pattern={{date 'YYYYMMDD-hhmmss'}},prefix=latest-
+            build-{{date 'YYYYMMDD-hhmmss'}}
+            latest${{ inputs.suffix != '' && '-${{ inputs.suffix }}' || '' }}
+            ${{ needs.config.outputs.short-rev }}${{ inputs.suffix != '' && '-${{ inputs.suffix }}' || '' }}
             ${{ inputs.deploy-tag != '' && inputs.deploy-tag || '' }}
 
       - id: login-ecr
