@@ -18,6 +18,10 @@ on:
         required: false
         default: us-west-2
         type: string
+      context:
+        description: "Path to Dockerfile. Defaults to `.`"
+        type: string
+        default: "."
       env:
         description: "Target environment for deploying into"
         type: string
@@ -127,6 +131,7 @@ jobs:
       - id: build-push
         uses: docker/build-push-action@v3
         with:
+          context: ${{ inputs.context }}
           push: ${{ inputs.push }}
           tags: ${{ steps.docker-metadata.outputs.tags }}
           labels: ${{ steps.docker-metadata.outputs.labels }}

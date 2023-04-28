@@ -13,6 +13,10 @@ on:
         required: false
         default: us-west-2
         type: string
+      context:
+        description: "Path to Dockerfile. Defaults to `.`"
+        type: string
+        default: "."
       env:
         description: "Target environment for deploying into"
         type: string
@@ -129,7 +133,7 @@ jobs:
 
       - id: docker-build
         run: |
-          docker build ${{ steps.docker-config.outputs.build-args }} ${{ steps.docker-config.outputs.tag-args }} .
+          docker build ${{ steps.docker-config.outputs.build-args }} ${{ steps.docker-config.outputs.tag-args }} ${{ inputs.context }}
 
       - id: docker-push
         if: ${{ inputs.push }}
