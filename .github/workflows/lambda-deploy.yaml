@@ -84,6 +84,12 @@ jobs:
         name: ${{ inputs.artifact }}
         path: .
 
+    - id: debug
+      run: |
+        : Debug lambda artifact
+        unzip -l lambda.zip
+        find .
+
     - uses: aws-actions/configure-aws-credentials@v1
       with:
         role-to-assume: ${{ needs.config.outputs.deployment-role }}
@@ -93,16 +99,11 @@ jobs:
       run: |
         : Test if lambda exists
         lambda_update=false
-        if aws lambda get-function --function-name '${{ inputs.function-name }}' --region '${{ needs.config.outputs.aws-region }}' > /dev/null 2>&1; then
+        if aws lambda get-function --function-name '${{ inputs.function-name }}' --region '${{ needs.config.outputs.aws-region }}' > /dev/null; then
+          echo "Detected lambda: ${{ inputs.function-name }}"
           lambda_update=true
         fi
         echo "update=${lambda_update}" >> "${GITHUB_OUTPUT}"
-
-    - id: debug
-      run: |
-        : Debug lambda artifact
-        unzip -l lambda.zip
-        find .
 
     - id: create
       if: ${{ steps.lambda.outputs.update != 'true' }}
@@ -136,6 +137,11 @@ jobs:
       if: ${{ steps.lambda.outputs.update }}
       run: |
         : Update Lambda Config
+        for i in $(seq 100); do
+          status="$(aws lambda get-function --function-name '${{ inputs.function-name }}' --region '${{ needs.config.outputs.aws-region }}' | jq -r .Configuration.LastUpdateStatus)"
+          test "${status}" = 'InProgress' || break
+          sleep 3
+        done
         set --
         set -- "$@" --handler '${{ inputs.handler }}'
         set -- "$@" --region '${{ needs.config.outputs.aws-region }}'
