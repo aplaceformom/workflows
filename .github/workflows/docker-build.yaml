@@ -92,7 +92,7 @@ jobs:
       packages: write
     steps:
       - name: 'Configure AWS credentials'
-        uses: aws-actions/configure-aws-credentials@v1
+        uses: aws-actions/configure-aws-credentials@v2
         with:
           role-to-assume: ${{ needs.config.outputs.deployment-role }}
           aws-region: ${{ needs.config.outputs.aws-region }}
