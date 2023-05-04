@@ -87,7 +87,9 @@ jobs:
           role-to-assume: ${{ needs.config.outputs.deployment-role }}
           aws-region: ${{ needs.config.outputs.aws-region }}
 
-      - uses: actions/checkout@v3
+      - id: aws-debug
+        run: |
+          aws sts get-caller-identity
 
       - id: login-ecr
         uses: aws-actions/amazon-ecr-login@v1
@@ -125,6 +127,8 @@ jobs:
           echo "tag-args=${tag_args}" >> "${GITHUB_OUTPUT}"
           if test -n "${{ secrets.build-args }}"; then echo "build-args=$(build_args)" >> "${GITHUB_OUTPUT}"
           else echo 'build-args=' >> "${GITHUB_OUTPUT}"; fi
+
+      - uses: actions/checkout@v3
 
       - id: docker-pull
         shell: bash
