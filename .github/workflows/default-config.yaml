@@ -39,7 +39,7 @@ on:
         description: "The Git short rev of the sha that triggered the event."
         value: ${{ jobs.config.outputs.short-rev }}
       account-id:
-        description: "The account-id cooresponding to the target environment."
+        description: "The account-id corresponding to the target environment."
         value: ${{ jobs.config.outputs.account-id }}
       ecr-repo:
         description: "The URI to the ECR repo to use"

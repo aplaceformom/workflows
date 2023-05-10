@@ -12,7 +12,7 @@ on:
         type: string
         required: true
       function-role:
-        description: Name of AWS IAM role the lambda should executre as.
+        description: Name of AWS IAM role the lambda should execute as.
         type: string
         required: true
       description:

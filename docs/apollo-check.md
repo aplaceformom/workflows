@@ -42,7 +42,7 @@ jobs:
 
 ### node-env
 
-- **description**: The NODE_ENV we are targetting. Default: development
+- **description**: The NODE_ENV we are targeting. Default: development
 - **type**: string
 - **default**: development
 - **required**: False

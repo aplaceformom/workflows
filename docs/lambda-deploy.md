@@ -12,7 +12,7 @@ jobs:
     uses: aplaceformom/workflows/.github/workflows/.github/workflows/lambda-deploy.yaml@main
     with:
       function-name: "Name of the Lambda Function"
-      function-role: "Name of AWS IAM role the lambda should executre as."
+      function-role: "Name of AWS IAM role the lambda should execute as."
       description: "Description of Lambda"
       runtime: "The Lambda's runtime. E.g. python3.8, nodejs14.x, go1.x, dotnetcore3.1, etc"
       deployment-role: "AWS IAM Role to assume when deploying the lambda"
@@ -36,7 +36,7 @@ jobs:
 
 ### function-role
 
-- **description**: Name of AWS IAM role the lambda should executre as.
+- **description**: Name of AWS IAM role the lambda should execute as.
 - **type**: string
 - **default**: False
 - **required**: True
