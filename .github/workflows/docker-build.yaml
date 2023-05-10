@@ -22,6 +22,10 @@ on:
         description: "Path to Dockerfile. Defaults to `.`"
         type: string
         default: "."
+      dockerfile:
+        description: "Path and filename for Dockerfile to use. Defaults to `./Dockerfile`"
+        type: string
+        default: "./Dockerfile"
       env:
         description: "Target environment for deploying into"
         type: string
@@ -138,6 +142,7 @@ jobs:
           build-args: ${{ secrets.build-args }}
           cache-from: type=registry,ref=ghcr.io/${{ github.repository }}:latest
           cache-to: type=inline
+          dockerfile: ${{ inputs.dockerfile }}
 
       - if: always()
         run: |
