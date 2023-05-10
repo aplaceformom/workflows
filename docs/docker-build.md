@@ -42,6 +42,13 @@ jobs:
 - **default**: .
 - **required**: False
 
+### dockerfile
+
+- **description**: Path and filename for Dockerfile to use. Defaults to `./Dockerfile`
+- **type**: string
+- **default**: ./Dockerfile
+- **required**: False
+
 ### env
 
 - **description**: Target environment for deploying into
