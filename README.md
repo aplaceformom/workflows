@@ -4,8 +4,8 @@ TODO: Blurb about what these things are, and where to find official documentatio
 
 ## Workflows
 
-[//]: # AUTODOC
-[//]: # AUTODOC
+[//]: # (AUTODOC)
+[//]: # (AUTODOC)
 
 You can find a list of the workflows, and links to their documentation, in the [.github/workflows directory](.github/workflows/README.md).
 
