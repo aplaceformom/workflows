@@ -142,7 +142,7 @@ jobs:
           build-args: ${{ secrets.build-args }}
           cache-from: type=registry,ref=ghcr.io/${{ github.repository }}:latest
           cache-to: type=inline
-          dockerfile: ${{ inputs.dockerfile }}
+          file: ${{ inputs.dockerfile }}
 
       - if: always()
         run: |

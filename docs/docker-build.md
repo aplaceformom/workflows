@@ -25,7 +25,7 @@ jobs:
 
 - **description**: AWS IAM Role to assume when deploying to ECR.
 - **type**: string
-- **default**:
+- **default**: 
 - **required**: False
 
 ### aws-region
@@ -60,7 +60,7 @@ jobs:
 
 - **description**: AWS ECR Repo to push to.
 - **type**: string
-- **default**:
+- **default**: 
 - **required**: False
 
 ### ecr-root
