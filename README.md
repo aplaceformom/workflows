@@ -1,6 +1,6 @@
 # A Place For Mom Re-usable Workflows
 
-TODO: Blurb about what these things are, and where to find official documentation
+These workflows are re-usable and can be used following the documentation found [here](https://docs.github.com/en/actions/using-workflows/reusing-workflows#calling-a-reusable-workflow).
 
 ## Workflows
 
@@ -21,8 +21,6 @@ TODO: Blurb about what these things are, and where to find official documentatio
 - [sentry-release.md](./docs/sentry-release.md)
 
 [//]: # (AUTODOC)
-
-You can find a list of the workflows, and links to their documentation, in the [.github/workflows directory](.github/workflows/README.md).
 
 ## Integrations
 
