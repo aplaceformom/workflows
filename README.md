@@ -5,6 +5,7 @@ TODO: Blurb about what these things are, and where to find official documentatio
 ## Workflows
 
 [//]: # (AUTODOC)
+
 - [apollo-check.md](./docs/apollo-check.md)
 - [default-config.md](./docs/default-config.md)
 - [docker-build.md](./docs/docker-build.md)
@@ -18,6 +19,7 @@ TODO: Blurb about what these things are, and where to find official documentatio
 - [nodejs-run.md](./docs/nodejs-run.md)
 - [pre-commit.md](./docs/pre-commit.md)
 - [sentry-release.md](./docs/sentry-release.md)
+
 [//]: # (AUTODOC)
 
 You can find a list of the workflows, and links to their documentation, in the [.github/workflows directory](.github/workflows/README.md).
