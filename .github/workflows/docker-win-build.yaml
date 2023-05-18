@@ -107,6 +107,7 @@ jobs:
           : Generate Docker Metadata
           build_args() {
           while read arg; do
+            test -n "${arg}" || continue
             arg="$(echo "${arg}" | sed -e 's/^[[:space:]]\+//;s/[[:space:]]\+$//')"
             printf ' --build-arg "%s" ' "${arg}"
           done<<EOF
