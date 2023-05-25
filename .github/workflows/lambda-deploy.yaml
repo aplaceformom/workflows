@@ -134,7 +134,7 @@ jobs:
         aws lambda update-function-code "$@"
 
     - id: update-config
-      if: ${{ steps.lambda.outputs.update }}
+      if: ${{ steps.lambda.outputs.update == 'true' }}
       run: |
         : Update Lambda Config
         for i in $(seq 100); do
