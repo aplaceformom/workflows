@@ -88,12 +88,12 @@ jobs:
           role-to-assume: ${{ needs.config.outputs.deployment-role }}
           aws-region: ${{ needs.config.outputs.aws-region }}
 
-      - id: aws-debug
-        if: ${{ failure() }}
+      - id: disable-wincred
         shell: bash
         run: |
-          printf '::debug::account-id prefix %.4s\n' '${{ steps.aws-credentials.outputs.aws-account-id }}'
-          printf '::debug::%s\n' "$(aws sts get-caller-identity)"
+          : Disabling wincred for docker login
+          sed -i -e '/credsStore.*wincred/d' "${USERPROFILE}/.docker/config.json"
+          aws ecr get-login-password | docker login --username AWS --password-stdin '${{ steps.login-ecr.outputs.registry }}'
 
       - id: login-ecr
         uses: aws-actions/amazon-ecr-login@v1
@@ -107,8 +107,8 @@ jobs:
           printf '::debug::ecr-password = %s\n' "$(aws ecr get-login-password)"
           printf '::debug::USERPROFILE=%s\n' "${USERPROFILE}"
           printf '::debug::config.json = %s\n' "$(cat "${USERPROFILE}/.docker/config.json")"
-          sed -i -e '/credsStore.*wincred/d' "${USERPROFILE}/.docker/config.json"
-          aws ecr get-login-password | docker login --username AWS --password-stdin '${{ steps.login-ecr.outputs.registry }}'
+          printf '::debug::account-id prefix %.4s\n' '${{ steps.aws-credentials.outputs.aws-account-id }}'
+          printf '::debug::%s\n' "$(aws sts get-caller-identity)"
 
       - id: login-ghcr
         uses: docker/login-action@v2
