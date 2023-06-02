@@ -92,8 +92,9 @@ jobs:
         shell: bash
         run: |
           : Disabling wincred for docker login
-          sed -i -e '/credsStore.*wincred/d' "${USERPROFILE}/.docker/config.json"
-          aws ecr get-login-password | docker login --username AWS --password-stdin '${{ steps.login-ecr.outputs.registry }}'
+          printf '::debug::config.json = %s\n' "$(cat "${USERPROFILE}/.docker/config.json")"
+          jq 'del(.credsStore)' < "${USERPROFILE}/.docker/config.json" > "${USERPROFILE}/.docker/config.json.new"
+          mv "${USERPROFILE}/.docker/config.json.new" "${USERPROFILE}/.docker/config.json"
 
       - id: login-ecr
         uses: aws-actions/amazon-ecr-login@v1
@@ -106,7 +107,6 @@ jobs:
           printf '::debug::ecr-registry prefix: %.4s\n' '${{ steps.login-ecr.outputs.registry }}'
           printf '::debug::ecr-password = %s\n' "$(aws ecr get-login-password)"
           printf '::debug::USERPROFILE=%s\n' "${USERPROFILE}"
-          printf '::debug::config.json = %s\n' "$(cat "${USERPROFILE}/.docker/config.json")"
           printf '::debug::account-id prefix %.4s\n' '${{ steps.aws-credentials.outputs.aws-account-id }}'
           printf '::debug::%s\n' "$(aws sts get-caller-identity)"
 
