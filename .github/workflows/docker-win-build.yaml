@@ -101,7 +101,12 @@ jobs:
       - id: debug-ecr
         if: ${{ failure() }}
         shell: bash
-        run: printf '::debug::%.4s\n' '${{ steps.login-ecr.outputs.registry }}'
+        run: |
+          : Debugging ECR Login failure
+          printf '::debug::ecr-registry prefix: %.4s\n' '${{ steps.login-ecr.outputs.registry }}'
+          login_status='success'
+          aws ecr get-login-password || login_status='failure'
+          printf '::debug::ecr-login-status %s\n' "${login_status}"
 
       - id: login-ghcr
         uses: docker/login-action@v2
