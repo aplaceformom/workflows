@@ -88,8 +88,8 @@ jobs:
           aws-region: ${{ needs.config.outputs.aws-region }}
 
       - id: aws-debug
-        run: |
-          echo "::debug::$(aws sts get-caller-identity)"
+        shell: bash
+        run: echo "::debug::$(aws sts get-caller-identity)"
 
       - id: login-ecr
         uses: aws-actions/amazon-ecr-login@v1
