@@ -82,17 +82,26 @@ jobs:
       packages: write
     steps:
       - name: 'Configure AWS credentials'
+        id: aws-credentials
         uses: aws-actions/configure-aws-credentials@v2
         with:
           role-to-assume: ${{ needs.config.outputs.deployment-role }}
           aws-region: ${{ needs.config.outputs.aws-region }}
 
       - id: aws-debug
+        if: ${{ failure() }}
         shell: bash
-        run: echo "::debug::$(aws sts get-caller-identity)"
+        run: |
+          printf '::debug::account-id prefix %.4s\n' '${{ steps.aws-credentials.outputs.aws-account-id }}'
+          printf '::debug::%s\n' "$(aws sts get-caller-identity)"
 
       - id: login-ecr
         uses: aws-actions/amazon-ecr-login@v1
+
+      - id: debug-ecr
+        if: ${{ failure() }}
+        shell: bash
+        run: printf '::debug::%.4s\n' '${{ steps.login-ecr.outputs.registry }}'
 
       - id: login-ghcr
         uses: docker/login-action@v2
