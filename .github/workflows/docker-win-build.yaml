@@ -89,7 +89,7 @@ jobs:
 
       - id: aws-debug
         run: |
-          aws sts get-caller-identity
+          echo "::debug::$(aws sts get-caller-identity)"
 
       - id: login-ecr
         uses: aws-actions/amazon-ecr-login@v1
