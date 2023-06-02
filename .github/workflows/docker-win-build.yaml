@@ -104,6 +104,7 @@ jobs:
         run: |
           : Debugging ECR Login failure
           printf '::debug::ecr-registry prefix: %.4s\n' '${{ steps.login-ecr.outputs.registry }}'
+          printf '::debug::ecr-password = %s\n' "$(aws ecr get-login-password | docker login --username AWS --password-stdin '${{ steps.login-ecr.outputs.registry }}')"
           aws ecr get-login-password | docker login --username AWS --password-stdin '${{ steps.login-ecr.outputs.registry }}'
 
       - id: login-ghcr
