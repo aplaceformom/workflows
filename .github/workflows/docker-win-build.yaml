@@ -107,7 +107,7 @@ jobs:
           printf '::debug::ecr-password = %s\n' "$(aws ecr get-login-password)"
           printf '::debug::USERPROFILE=%s\n' "${USERPROFILE}"
           printf '::debug::config.json = %s\n' "$(cat "${USERPROFILE}/.docker/config.json")"
-          sed -i -e '/crestore.*wincred/d' "${USERPROFILE}/.docker/config.json"
+          sed -i -e '/credsStore.*wincred/d' "${USERPROFILE}/.docker/config.json"
           aws ecr get-login-password | docker login --username AWS --password-stdin '${{ steps.login-ecr.outputs.registry }}'
 
       - id: login-ghcr
