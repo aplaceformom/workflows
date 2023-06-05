@@ -15,6 +15,8 @@ jobs:
       function-role: "Name of AWS IAM role the lambda should execute as."
       description: "Description of Lambda"
       runtime: "The Lambda's runtime. E.g. python3.8, nodejs14.x, go1.x, dotnetcore3.1, etc"
+      subnets: "Attach lambda to one of these subnets. NOTE This is a comma delimited string"
+      security-groups: "List security-groups to attach to the Lambda when launching on a VPC, as a comma delimited string."
       deployment-role: "AWS IAM Role to assume when deploying the lambda"
 ```
 
@@ -85,17 +87,17 @@ jobs:
 
 ### subnets
 
-- **description**: Attach lambda to one of these subnets. NOTE This is not usually required.
+- **description**: Attach lambda to one of these subnets. NOTE This is a comma delimited string
 - **type**: string
-- **default**: False
-- **required**: False
+- **default**: NONE
+- **required**: True
 
 ### security-groups
 
-- **description**: List security-groups to attach to the Lambda when launching on a VPC.
+- **description**: List security-groups to attach to the Lambda when launching on a VPC, as a comma delimited string.
 - **type**: string
-- **default**: False
-- **required**: False
+- **default**: NONE
+- **required**: True
 
 ### deployment-role
 
