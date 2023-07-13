@@ -63,6 +63,8 @@ jobs:
       short-rev: ${{ steps.config.outputs.short-rev }}
       ecr-repo: ${{ steps.config.outputs.ecr-repo }}
       project: ${{ steps.config.outputs.project }}
+      account-id: ${{ steps.config.outputs.account-id }}
+      aws-region: ${{ steps.config.outputs.account-id }}
     steps:
     - id: config
       run: |
@@ -87,3 +89,5 @@ jobs:
         echo "application-role=${app_role}" >> "${GITHUB_OUTPUT}"
         echo "project=${project}" >> "${GITHUB_OUTPUT}"
         printf 'short-rev=%.7s\n' '${{ github.sha }}' >> "${GITHUB_OUTPUT}"
+        echo "account-id=${account_id}" >> "${GITHUB_OUTPUT}"
+        echo "aws-region=${{ inputs.aws-region }}" >> "${GITHUB_OUTPUT}"
