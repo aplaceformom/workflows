@@ -15,7 +15,6 @@ jobs:
       function-role: "Name of AWS IAM role the lambda should execute as."
       description: "Description of Lambda"
       runtime: "The Lambda's runtime. E.g. python3.8, nodejs14.x, go1.x, dotnetcore3.1, etc"
-      deployment-role: "AWS IAM Role to assume when deploying the lambda"
 ```
 
 ## inputs
@@ -109,7 +108,7 @@ jobs:
 - **description**: AWS IAM Role to assume when deploying the lambda
 - **type**: string
 - **default**: False
-- **required**: True
+- **required**: False
 
 ### aws-region
 
