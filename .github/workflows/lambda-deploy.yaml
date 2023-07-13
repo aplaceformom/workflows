@@ -19,6 +19,10 @@ on:
         description: Description of Lambda
         type: string
         required: true
+      env:
+        description: Target environment. E.g. dev, qa. prod
+        type: string
+        default: dev
       handler:
         description: Lambda file.entrypoint
         type: string
@@ -70,6 +74,7 @@ jobs:
       deployment-role: ${{ inputs.deployment-role || null }}
       application-role: ${{ inputs.function-role  || null }}
       aws-region: ${{ inputs.aws-region || null }}
+      env: ${{ inputs.env }}
 
 
   deploy:

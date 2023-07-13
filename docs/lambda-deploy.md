@@ -48,6 +48,13 @@ jobs:
 - **default**: False
 - **required**: True
 
+### env
+
+- **description**: Target environment. E.g. dev, qa. prod
+- **type**: string
+- **default**: dev
+- **required**: False
+
 ### handler
 
 - **description**: Lambda file.entrypoint
