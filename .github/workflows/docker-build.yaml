@@ -30,6 +30,11 @@ on:
         description: "Target environment for deploying into"
         type: string
         default: "dev"
+      stamp:
+        description: "optional identifying tag to be placed inside the repo (file: build.stamp)"
+        required: false
+        default: "${github.sha}"
+        type: string
       ecr-repo:
         description: "AWS ECR Repo to push to."
         required: false
@@ -104,6 +109,9 @@ jobs:
       - uses: actions/checkout@v3
         with:
           submodules: "${{ env.SUBMODULE_REC }}"
+
+      - if: always()
+        run: echo "${{ inputs.stamp }}" > build.stamp
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v1
