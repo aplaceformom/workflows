@@ -58,9 +58,16 @@ jobs:
 
 ### stamp
 
-- **description**: Stamp the build with a consumable file (file: ./build.stamp). (Default: ${ github.sha })
+- **description**: Stamp the build with a consumable file (Default: ${ github.sha })
 - **type**: string
 - **default**: ${{ github.sha }}
+- **required**: False
+
+### stamp_file
+
+- **description**: Specify the build stamp filename (Default: build.stamp)
+- **type**: string
+- **default**: build.stamp
 - **required**: False
 
 ### ecr-repo
