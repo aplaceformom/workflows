@@ -31,9 +31,14 @@ on:
         type: string
         default: "dev"
       stamp:
-        description: "Stamp the build with a consumable file (file: ./build.stamp). (Default: ${ github.sha })"
+        description: "Stamp the build with a consumable file (Default: ${ github.sha })"
         type: string
         default: "${{ github.sha }}"
+        required: false
+      stamp_file:
+        description: "Specify the build stamp filename (Default: build.stamp)"
+        type: string
+        default: "build.stamp"
         required: false
       ecr-repo:
         description: "AWS ECR Repo to push to."
@@ -112,7 +117,7 @@ jobs:
 
       - if: always()
         run: |
-          echo "${{ inputs.stamp }}" > build.stamp
+          echo "${{ inputs.stamp }}" > ${{ inputs.stamp_file }}
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v1
