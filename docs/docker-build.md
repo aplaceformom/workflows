@@ -56,6 +56,13 @@ jobs:
 - **default**: dev
 - **required**: False
 
+### stamp
+
+- **description**: optional identifying tag to be placed inside the repo
+- **type**: string
+- **default**: ${github.sha}
+- **required**: False
+
 ### ecr-repo
 
 - **description**: AWS ECR Repo to push to.
