@@ -58,9 +58,9 @@ jobs:
 
 ### stamp
 
-- **description**: optional identifying tag to be placed inside the repo
+- **description**: Stamp the build with a consumable file (file: ./build.stamp). (Default: ${ github.sha })
 - **type**: string
-- **default**: ${github.sha}
+- **default**: ${{ github.sha }}
 - **required**: False
 
 ### ecr-repo

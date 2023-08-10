@@ -31,7 +31,7 @@ on:
         type: string
         default: "dev"
       stamp:
-        description: "Stamp the build with a consumable file (file: ./build.stamp). (Default: \${ github.sha })"
+        description: "Stamp the build with a consumable file (file: ./build.stamp). (Default: ${ github.sha })"
         type: string
         default: "${{ github.sha }}"
         required: false
