@@ -14,7 +14,7 @@ on:
       function-role:
         description: Name of AWS IAM role the lambda should execute as.
         type: string
-        required: true
+        default: lambda_basic_execution
       description:
         description: Description of Lambda
         type: string
