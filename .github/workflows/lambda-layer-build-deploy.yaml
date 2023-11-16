@@ -1,0 +1,123 @@
+name: Lambda Layer Build Deploy
+
+on:
+  workflow_call:
+    inputs:
+      description:
+        type: string
+        required: true
+      function-name:
+        description: Lambda function name to attach layer to
+        type: string
+        required: true
+      layer-name:
+        type: string
+        required: true
+      layer-file-path:
+        type: string
+        required: true
+      runtimes:
+        type: string
+        required: false
+        default: nodejs18.x
+      deployment-role:
+        description: AWS IAM Role to assume when deploying the lambda
+        type: string
+        required: false
+      env:
+        description: Target environment. E.g. dev, qa. prod
+        type: string
+        default: dev
+      aws-region:
+        description: AWS Region to deploy the Lambda to.
+        type: string
+        default: us-west-2
+    secrets:
+      token:
+        description: Auth token to use, default to github.token
+        required: false
+
+env:
+  GITHUB_TOKEN: ${{ secrets.token == '' && secrets.token || github.token }}
+
+jobs:
+  config:
+    uses: aplaceformom/workflows/.github/workflows/default-config.yaml@main
+    with:
+      deployment-role: ${{ inputs.deployment-role || null }}
+      application-role: ${{ inputs.function-role  || null }}
+      aws-region: ${{ inputs.aws-region || null }}
+      env: ${{ inputs.env }}
+
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - run: (cd ${{inputs.layer-file-path}} && zip -0 ../lambda-layer.zip nodejs/*)
+
+      - uses: actions/upload-artifact@v3
+        with:
+          name: ${{ inputs.layer-name }}
+          path: lambda-layer.zip
+
+  deploy:
+      needs: [config, build]
+      runs-on: ubuntu-latest
+      permissions:
+        id-token: write
+        contents: read
+      steps:
+      - uses: actions/download-artifact@v3
+        with:
+          name: ${{ inputs.layer-name }}
+          path: .
+
+      - id: debug
+        run: |
+          : Debug lambda layer artifact
+          unzip -l lambda-layer.zip
+          find .
+
+      - uses: aws-actions/configure-aws-credentials@v2
+        with:
+          role-to-assume: ${{ needs.config.outputs.deployment-role }}
+          aws-region: ${{ needs.config.outputs.aws-region }}
+
+      - id: publish
+        run: |
+          : Publish Layer Version
+          set --
+          set -- "$@" --layer-name '${{ inputs.layer-name }}'
+          set -- "$@" --description '${{ inputs.description }}'
+          set -- "$@" --zip-file "fileb://${PWD}/lambda-layer.zip"
+          set -- "$@" --compatible-runtimes '${{ inputs.runtimes }}'
+          set -- "$@" --compatible-architectures "arm64" "x86_64"
+          aws lambda publish-layer-version "$@"
+
+  update:
+    needs: [config, deploy]
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
+    steps:
+    - uses: aws-actions/configure-aws-credentials@v2
+      with:
+        role-to-assume: ${{ needs.config.outputs.deployment-role }}
+        aws-region: ${{ needs.config.outputs.aws-region }}
+
+    - id: latest-layer
+      run: |
+        : Get Latest Layer Version
+        echo "layer-version=$(aws lambda list-layer-versions --layer-name '${{ inputs.layer-name}}' --output=json)" >> "$GITHUB_OUPUT"
+        echo "${{layer-version}}"
+
+    - id: update-lambda
+      run: |
+        : Update Lambda with Latest Layer
+        set --
+        set -- "$@" --function-name '${{ inputs.function-name }}'
+        set -- "$@" --layers '${{ steps.latest-layer.outputs.layer-version.Layers[0].LayerVersionArn}}'
+
+        aws lambda update-function-configuration "$@"
