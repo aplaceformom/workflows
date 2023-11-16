@@ -13,7 +13,7 @@ on:
       layer-name:
         type: string
         required: true
-      layer-file-path:
+      artifact:
         type: string
         required: true
       runtimes:
@@ -49,20 +49,8 @@ jobs:
       aws-region: ${{ inputs.aws-region || null }}
       env: ${{ inputs.env }}
 
-  build:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-
-      - run: (cd ${{inputs.layer-file-path}} && zip -0 ../lambda-layer.zip nodejs/*)
-
-      - uses: actions/upload-artifact@v3
-        with:
-          name: ${{ inputs.layer-name }}
-          path: lambda-layer.zip
-
   deploy:
-      needs: [config, build]
+      needs: [config]
       runs-on: ubuntu-latest
       permissions:
         id-token: write
@@ -70,7 +58,7 @@ jobs:
       steps:
       - uses: actions/download-artifact@v3
         with:
-          name: ${{ inputs.layer-name }}
+          name: ${{ inputs.artifact }}
           path: .
 
       - id: debug

@@ -14,7 +14,7 @@ jobs:
       layer-name: "Name of Lambda Layer"
       function-name: "Name of the Lambda Function to attach layer to"
       description: "Description of Lambda Layer"
-      layer-file-path: "lambda-layer/layer1"
+      artifact: "layer1"
 ```
 
 ## inputs
@@ -40,9 +40,9 @@ jobs:
 - **default**: False
 - **required**: True
 
-### layer-file-path
+### artifact
 
-- **description**: Relative path to the folder with content for layer
+- **description**: The name of the lambda layer artifact to upload
 - **type**: string
 - **default**: False
 - **required**: True
