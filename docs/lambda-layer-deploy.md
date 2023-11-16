@@ -1,4 +1,4 @@
-# (.github/workflows/lambda-layer-build-deploy.yaml) Deploy Lambda Layer
+# (.github/workflows/lambda-layer-deploy.yaml) Deploy Lambda Layer
 
 ## Example
 
@@ -9,7 +9,7 @@ on:
     branches: [main]
 jobs:
   build:
-    uses: aplaceformom/workflows/.github/workflows/.github/workflows/lambda-layer-build-deploy.yaml@main
+    uses: aplaceformom/workflows/.github/workflows/.github/workflows/lambda-layer-deploy.yaml@main
     with:
       layer-name: "Name of Lambda Layer"
       function-name: "Name of the Lambda Function to attach layer to"

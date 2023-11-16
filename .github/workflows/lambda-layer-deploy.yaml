@@ -1,4 +1,4 @@
-name: Lambda Layer Build Deploy
+name: Lambda Layer Deploy
 
 on:
   workflow_call:
