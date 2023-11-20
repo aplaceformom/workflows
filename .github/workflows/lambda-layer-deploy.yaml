@@ -98,14 +98,15 @@ jobs:
     - id: latest-layer
       run: |
         : Get Latest Layer Version
-        echo "layer-version=$(aws lambda list-layer-versions --layer-name '${{ inputs.layer-name}}' --output=json)" >> "$GITHUB_OUPUT"
-        echo "${{layer-version}}"
+        echo "$(aws lambda list-layer-versions --layer-name '${{ inputs.layer-name}}' --output=json)" > config.json"
+        echo "LAYER_VERSION_ARN=$(cat config.json | tr -d \\n  | jq '.[0].LayerVersionArn)" >> "$GITHUB_OUPUT"
+        echo "${{"LAYER_VERSION_ARN}}"
 
     - id: update-lambda
       run: |
         : Update Lambda with Latest Layer
         set --
         set -- "$@" --function-name '${{ inputs.function-name }}'
-        set -- "$@" --layers '${{ steps.latest-layer.outputs.layer-version.Layers[0].LayerVersionArn}}'
+        set -- "$@" --layers '${{ steps.latest-layer.outputs.LAYER_VERSION_ARN}}'
 
         aws lambda update-function-configuration "$@"
