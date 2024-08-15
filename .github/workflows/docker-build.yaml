@@ -125,7 +125,7 @@ jobs:
           driver-opts: ${{ inputs.driver-opts }}
 
       - id: docker-metadata
-        uses: docker/metadata-action@v3
+        uses: docker/metadata-action@v5
         with:
           images: |
             ghcr.io/${{ github.repository }}
