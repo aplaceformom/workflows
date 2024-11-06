@@ -17,7 +17,7 @@ supported arguments.
 
 ##### Help / Options
 
-```
+```text
 usage: ssm2ecs.py [-h] -A APPNAME
 
 ECS environment and secret configuration generator.
@@ -28,11 +28,9 @@ options:
                         Specify the name of the service
 ```
 
-##### Example
+*Example*:
 
-```
-./ssm2ecs.py -A community-finance-charges-rest-api > fromLocation.json
-```
+`./ssm2ecs.py -A community-finance-charges-rest-api > fromLocation.json`
 
 ## grwrg.py (Github Re-usable Workflow Readme Generator)
 
@@ -49,8 +47,6 @@ codes. They are as follows:
 4. Option has no description
 5. Option has no specified type
 
-##### Example
+*Example*:
 
-```
-.github/scripts/grwrg.py .github/workflows/github-event.yaml .github/workflows/docker-build.yaml
-```
+`.github/scripts/grwrg.py .github/workflows/github-event.yaml .github/workflows/docker-build.yaml`
