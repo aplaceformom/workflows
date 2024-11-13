@@ -125,7 +125,7 @@ jobs:
         set -- "$@" --role '${{ inputs.function-role }}'
         set -- "$@" --description '${{ inputs.description }}'
         if test ! -z "${{ inputs.subnets }}" && test ! -z "${{ inputs.security-groups }}"; then
-        set -- "$@" --vpc-config 'SubnetIds=[${{ inputs.subnets }}],SecurityGroups=[${{ inputs.security-groups }}]'
+        set -- "$@" --vpc-config 'SubnetIds=[${{ inputs.subnets }}],SecurityGroupIds=[${{ inputs.security-groups }}]'
         fi
         set -- "$@" ${{ inputs.publish && '--publish' || '--no-publish' }}
         aws lambda create-function "$@"
