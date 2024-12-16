@@ -100,6 +100,16 @@ jobs:
         role-to-assume: ${{ needs.config.outputs.deployment-role }}
         aws-region: ${{ needs.config.outputs.aws-region }}
 
+    - name: Default role check
+      id: role_check
+      run: |
+        : Appropriately set our lambda role if it's the default
+        ARN=${{ inputs.function-role }}
+        if test "${{ inputs.function-role }}" = "lambda_basic_execution"; then
+          ARN=arn:aws:iam::${{ needs.config.outputs.account-id }}:role/${{ inputs.function-role }}"
+        fi
+        echo "function_role=${ARN}" >> ${GITHUB_OUTPUT}
+
     - id: lambda
       run: |
         : Test if lambda exists
@@ -122,7 +132,7 @@ jobs:
         set -- "$@" --runtime '${{ inputs.runtime }}'
         set -- "$@" --timeout '${{ inputs.timeout }}'
         set -- "$@" --memory-size '${{ inputs.memory }}'
-        set -- "$@" --role '${{ inputs.function-role }}'
+        set -- "$@" --role '${{ steps.role_check.outputs.function_role }}'
         set -- "$@" --description '${{ inputs.description }}'
         if test ! -z "${{ inputs.subnets }}" && test ! -z "${{ inputs.security-groups }}"; then
         set -- "$@" --vpc-config 'SubnetIds=[${{ inputs.subnets }}],SecurityGroupIds=[${{ inputs.security-groups }}]'
@@ -159,6 +169,6 @@ jobs:
         set -- "$@" --runtime '${{ inputs.runtime }}'
         set -- "$@" --timeout '${{ inputs.timeout }}'
         set -- "$@" --memory-size '${{ inputs.memory }}'
-        set -- "$@" --role '${{ inputs.function-role }}'
+        set -- "$@" --role '${{ steps.role_check.outputs.function_role }}'
         set -- "$@" --description '${{ inputs.description }}'
         aws lambda update-function-configuration "$@"
