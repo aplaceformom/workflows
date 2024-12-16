@@ -1,0 +1,17 @@
+name: 'Install Terraform Tools'
+description: 'Install terraform and terramate'
+runs:
+  using: "composite"
+  steps:
+    - name: Install Terramate
+      uses: terramate-io/terramate-action@v2
+
+    - name: Install asdf
+      uses: asdf-vm/actions/setup@v3
+
+    - name: Install Terraform with asdf
+      run: |
+        asdf plugin add terraform
+        asdf install terraform
+      shell: bash
+

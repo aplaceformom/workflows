@@ -16,16 +16,8 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Install Terramate
-        uses: terramate-io/terramate-action@v2
-
-      - name: Install asdf
-        uses: asdf-vm/actions/setup@v3
-
-      - name: Install Terraform with asdf
-        run: |
-          asdf plugin add terraform
-          asdf install terraform
+      - name: Install terraform
+        uses: aplaceformom/workflows/.github/actions/terraform-install@main
 
       - name: List changed stacks
         id: list-changed
@@ -47,7 +39,7 @@ jobs:
       - name: Run Terraform init in all changed stacks
         if: steps.list-changed.outputs.stdout
         run: |
-          terramate script run preview
+          terramate script run --changed preview
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
