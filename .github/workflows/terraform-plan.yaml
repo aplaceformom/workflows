@@ -1,0 +1,82 @@
+name: Terraform Plan
+
+on:
+  workflow_call:
+    inputs:
+      aws_role:
+        required: true
+        type: string
+
+jobs:
+  reusable-job:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Install Terramate
+        uses: terramate-io/terramate-action@v2
+
+      - name: Install asdf
+        uses: asdf-vm/actions/setup@v3
+
+      - name: Install Terraform with asdf
+        run: |
+          asdf plugin add terraform
+          asdf install terraform
+
+      - name: List changed stacks
+        id: list-changed
+        run: |
+          terramate list -C stacks --changed
+
+      - name: Configure AWS credentials
+        if: steps.list-changed.outputs.stdout
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-region: us-west-2
+          role-to-assume: ${{ inputs.aws_role }}
+
+      - name: Verify AWS credentials
+        if: steps.list-changed.outputs.stdout
+        run: aws sts get-caller-identity
+
+      # ### Run the Terraform deployment via Terramate in each changed stack
+      - name: Run Terraform init in all changed stacks
+        if: steps.list-changed.outputs.stdout
+        run: |
+          terramate script run preview
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Generate Preview Comment
+        if: steps.list-changed.outputs.stdout
+        id: comment
+        run: |
+          echo >>pr-comment.txt "### List of Changed Stacks"
+          echo >>pr-comment.txt
+          echo >>pr-comment.txt '```bash'
+          echo >>pr-comment.txt "${{ steps.list-changed.outputs.stdout }}"
+          echo >>pr-comment.txt '```'
+          echo >>pr-comment.txt
+          echo >>pr-comment.txt "#### Terraform Plan"
+          echo >>pr-comment.txt
+          echo >>pr-comment.txt '```terraform'
+          TM_DISABLE_SAFEGUARDS=git-untracked,git-uncommitted terramate run --changed -- terraform show -no-color out.tfplan 2>&1 | dd bs=1024 count=248 >>pr-comment.txt
+          echo >>pr-comment.txt '```'
+          cat pr-comment.txt >>$GITHUB_STEP_SUMMARY
+
+      - name: Inform about no Changed Stacks
+        if: (!steps.list-changed.outputs.stdout)
+        run: |
+          echo >>pr-comment.txt '### No changed stacks.'
+          cat pr-comment.txt >>$GITHUB_STEP_SUMMARY
+
+      - name: Publish Plans for Changed Stacks
+        uses: marocchino/sticky-pull-request-comment@v2
+        with:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          header: terraform-plan
+          path: pr-comment.txt
