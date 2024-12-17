@@ -1,0 +1,44 @@
+name: Terraform Apply
+
+on:
+  workflow_call:
+    inputs:
+      aws_role:
+        required: true
+        type: string
+
+jobs:
+  reusable-job:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Install terraform
+        uses: aplaceformom/workflows/.github/actions/terraform-install@main
+
+      - name: List changed stacks
+        id: list-changed
+        run: |
+          terramate list -C stacks --changed
+
+      - name: Configure AWS credentials
+        if: steps.list-changed.outputs.stdout
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-region: us-west-2
+          role-to-assume: ${{ inputs.aws_role }}
+
+      - name: Verify AWS credentials
+        if: steps.list-changed.outputs.stdout
+        run: aws sts get-caller-identity
+
+      # ### Run the Terraform deployment via Terramate in each changed stack
+      - name: Run Terraform init in all changed stacks
+        if: steps.list-changed.outputs.stdout
+        run: |
+          terramate script run --changed deploy
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
