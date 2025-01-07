@@ -106,7 +106,7 @@ jobs:
         : Appropriately set our lambda role if it's the default
         ARN=${{ inputs.function-role }}
         if test "${{ inputs.function-role }}" = "lambda_basic_execution"; then
-          ARN=arn:aws:iam::${{ needs.config.outputs.account-id }}:role/${{ inputs.function-role }}"
+          ARN=arn:aws:iam::${{ needs.config.outputs.account-id }}:role/${{ inputs.function-role }}
         fi
         echo "function_role=${ARN}" >> ${GITHUB_OUTPUT}
 
